@@ -1,0 +1,60 @@
+{% include 'navbar/dashboard-side-navbar.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h1 class="text-center text-dark">Add Admin User</h1>
+    <form method="post">
+      {% csrf_token %}
+      <div class="row">
+        <div class="col-md-6">
+          <h2>User Information</h2>
+          <div class="mb-3">
+            {{ user_form.username.label_tag }}
+            {{ user_form.username }}
+          </div>
+          <div class="mb-3">
+            {{ user_form.password1.label_tag }}
+            {{ user_form.password1 }}
+          </div>
+          <div class="mb-3">
+            {{ user_form.password2.label_tag }}
+            {{ user_form.password2 }}
+          </div>
+        </div>
+        <div class="col-md-6">
+          <h2>Admin Information</h2>
+          <div class="mb-3">
+            {{ admin_form.first_name.label_tag }}
+            {{ admin_form.first_name }}
+          </div>
+          <div class="mb-3">
+            {{ admin_form.last_name.label_tag }}
+            {{ admin_form.last_name }}
+          </div>
+          <div class="mb-3">
+            {{ admin_form.login_time.label_tag }}
+            {{ admin_form.login_time }}
+          </div>
+          <div class="mb-3">
+            {{ admin_form.logout_time.label_tag }}
+            {{ admin_form.logout_time }}
+          </div>
+          <div class="mb-3">
+            {{ admin_form.is_customer.label_tag }}
+            {{ admin_form.is_customer }}
+          </div>
+          <div class="mb-3">
+            {{ admin_form.is_admin.label_tag }}
+            {{ admin_form.is_admin }}
+          </div>
+        </div>
+      </div>
+      <div class="d-grid gap-2 col-6 mx-auto mt-3">
+        <button type="submit" class="btn btn-dark btn-lg text-light">Add Admin</button>
+      </div>
+    </form>
+    <div class="text-center mt-3">
+      <a href="{% url 'fchub:users-admins' %}" class="btn btn-secondary">Back to Admin List</a>
+    </div>
+  </div>
+{% endblock %}

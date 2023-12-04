@@ -1,0 +1,196 @@
+{% extends 'navbar.html' %}
+{% load static %}
+
+{% block title %}FleekyHub{% endblock %}
+{% block content %}
+
+<!-- about section -->
+<section class="section pt-0" id="about">
+    <!-- container -->
+    <div class="container text-center">
+        <!-- about wrapper -->
+        <div class="about">
+            <div class="about-img-holder">
+                <img src="{% static 'imgs/FC_ICON.ico' %}" class="about-img" alt="Download free bootstrap 4 landing page, free bootstrap 4 templates, Download free bootstrap 4.1 landing page, free bootstrap 4.1.1 templates, Meyawo Landing page">
+            </div>
+            <div class="about-caption">
+                <p class="section-subtitle">Who are we?</p>
+                <h2 class="section-title mb-3">About Fleeky Curtains</h2>
+                <p>
+                    Fleeky curtains is currently an online business shop that provides comfort, joy, and warm satisfaction to the customers with regards to their curtain needs. It was established in 2021 and currently operates and manufactures its products locally. Our expertise and experience go hand-in-hand, strengthening our business in catering services and products directly to our clients' needs. We strive to provide top-notch services, products, and purchase experiences to consumers of all income levels. Fleeky curtains also aims to grow its market share in the home product industry by observing and adapting to consumer behavior. Our business values and qualities are reflected in the observable morals and qualities of our leading members. We are committed to delivering high-quality products to the general public.
+                </p>
+            </div>
+        </div><!-- end of about wrapper -->
+    </div><!-- end of container -->
+</section> <!-- end of about section -->
+
+<!-- service section -->
+<section class="section" id="service">
+    <div class="container text-center">
+        <p class="section-subtitle">Types of</p>
+        <h6 class="section-title mb-6">Fabrics We Use</h6>
+
+        <!-- row -->
+        <div class="row">
+            <div class="col-md-6 col-lg-3">
+                <div class="service-card">
+                    <div class="body">
+                        <img src="{% static 'imgs/pencil-case.svg' %}" alt="Sheer" class="icon">
+                        <h6 class="title">Sheer</h6>
+                        <p class="subtitle">Made using thin thread or low density of knit, resulting in a semi-transparent and lightweight cloth.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="service-card">
+                    <div class="body">
+                        <img src="{% static 'imgs/responsive.svg' %}" alt="Katrina" class="icon">
+                        <h6 class="title">Katrina</h6>
+                        <p class="subtitle">Uses a geometric tessellated design, ideal for a formal look.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="service-card">
+                    <div class="body">
+                        <img src="{% static 'imgs/toolbox.svg' %}" alt="Korean" class="icon">
+                        <h6 class="title">Korean</h6>
+                        <p class="subtitle">Features layers to design the appearance of your home with complex patterns.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="service-card">
+                    <div class="body">
+                        <img src="{% static 'imgs/analytics.svg' %}" alt="Blockout" class="icon">
+                        <h6 class="title">Blockout</h6>
+                        <p class="subtitle">Specially designed fabric that blocks all light from shining through the material.</p>
+                    </div>
+                </div>
+            </div>
+        </div><!-- end of row -->
+    </div>
+</section><!-- end of service section -->
+
+<!-- portfolio section -->
+<section class="section" id="portfolio">
+    <div class="container text-center">
+        <h6 class="section-title mb-6">Product Showcase</h6>
+        <!-- row -->
+        <div class="row">
+            <div class="mx-auto">
+                <a href="#" class="portfolio-card">
+                    <img class="portfolio-card-img" src="{% static 'imgs/superior.jpg' %}" alt="Curtain 1">
+                    <span class="portfolio-card-overlay">
+                        <span class="portfolio-card-caption">
+                            <h4>Intricate Quality Control!</h4>
+                            <p class="font-weight-normal">Clean Stitching, Longer-Lasting</p>
+                        </span>
+                    </span>
+                </a>
+            </div>
+            <div class="mx-auto">
+                <a href="#" class="portfolio-card">
+                    <img class="portfolio-card-img" src="{% static 'imgs/texture.jpg' %}" alt="Curtain 2">
+                    <span class="portfolio-card-overlay">
+                        <span class="portfolio-card-caption">
+                            <h4>Heavy Dimming Material</h4>
+                            <p class="font-weight-normal">Perfect Against Direct Sunlight</p>
+                        </span>
+                    </span>
+                </a>
+            </div>
+        </div><!-- end of row -->
+    </div><!-- end of container -->
+</section> <!-- end of portfolio section -->
+
+<!-- pricing section -->
+<section class="section" id="pricing">
+    <div class="container text-center">
+        <p class="section-subtitle">How Much We Charge?</p>
+        <h6 class="section-title mb-6">Our Prices:</h6>
+        <!-- row -->
+        <div class="pricing-wrapper">
+            <!-- Pricing Card 1 -->
+            <div class="pricing-card">
+                <div class="pricing-card-body">
+                    <h6 class="pricing-card-title">Sheer</h6>
+                    <div class="pricing-card-list">
+                        <p>Lightweight Material</p>
+                        <p>Textured Surface</p>
+                        <p>With or Without Ring</p>
+                        <p>7ft Length</p>
+                        <p>120 Inches Width</p>
+                        <p>Price Starts at:</p>
+                    </div>
+                </div>
+                <div class="pricing-card-footer">
+                    <span>₱</span>
+                    <span>250</span>
+                </div>
+                <a href="#" class="btn btn-primary mt-3 pricing-card-btn">Shop Now</a>
+            </div>
+            <!-- Pricing Card 2 -->
+            <div class="pricing-card">
+                <div class="pricing-card-body">
+                    <h6 class="pricing-card-title">Katrina</h6>
+                    <div class="pricing-card-list">
+                        <p>5-in-1 & 3-in-1 Set</p>
+                        <p>Polyester Fabric</p>
+                        <p>30-40% Dimming</p>
+                        <p>Daylight Curtains</p>
+                        <p>7ft, 8 Rings</p>
+                        <p>Price Starts at:</p>
+                    </div>
+                </div>
+                <div class="pricing-card-footer">
+                    <span>₱</span>
+                    <span>750</span>
+                </div>
+                <a href="#five-and-one" class="btn btn-primary mt-3 pricing-card-btn">Shop Now</a>
+            </div>
+            <!-- Pricing Card 3 -->
+            <div class="pricing-card">
+                <div class="pricing-card-body">
+                    <h6 class="pricing-card-title">Korean</h6>
+                    <div class="pricing-card-list">
+                        <p>80% Blockout</p>
+                        <p>Double-Backing Material</p>
+                        <p>Premium Brocade Fabric</p>
+                        <p>Textured and Smooth Surface</p>
+                        <p>8 Rings, 7ft Length</p>
+                        <p>Price Starts at:</p>
+                    </div>
+                </div>
+                <div class="pricing-card-footer">
+                    <span>₱</span>
+                    <span>950</span>
+                </div>
+                <a href="#three-and-one" class="btn btn-primary mt-3 pricing-card-btn">Shop Now</a>
+            </div>
+            <!-- Pricing Card 4 -->
+            <div class="pricing-card">
+                <div class="pricing-card-body">
+                    <h6 class="pricing-card-title">Blockouts</h6>
+                    <div class="pricing-card-list">
+                        <p>Textured</p>
+                        <p>100% Pure Blackout</p>
+                        <p>Heavy Dimming Fabric</p>
+                        <p>Triple-Layered Material</p>
+                        <p>Lowers AC Consumption</p>
+                        <p>Price Starts at:</p>
+                    </div>
+                </div>
+                <div class="pricing-card-footer">
+                    <span>₱</span>
+                    <span>1,250</span>
+                </div>
+                <a href="#blackout" class="btn btn-primary mt-3 pricing-card-btn">Shop Now</a>
+            </div>
+        </div><!-- end of pricing wrapper -->
+    </div> <!-- end of container -->
+</section><!-- end of pricing section -->
+
+<!-- testimonial section -->
+
+{% endblock %}

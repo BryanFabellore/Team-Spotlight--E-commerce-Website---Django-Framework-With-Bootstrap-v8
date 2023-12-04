@@ -1,0 +1,109 @@
+{% include 'navbar/dashboard-side-navbar.html' %}
+{% block content %}
+
+<head>
+    <title>Product Visualizations</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      .product-card {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 10px;
+        width: 300px;
+        display: inline-block;
+        text-align: center;
+      }
+      .bar-graph-container,
+      .line-graph-container {
+        max-width: 600px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Product Visualizations</h1>
+  
+    <div class="row">
+      <div class="col-md-6 bar-graph-container">
+        <!-- Bar graph in landscape orientation with a smaller size -->
+        <canvas id="productCountBarChart" width="600" height="300"></canvas>
+      </div>
+  
+      <div class="col-md-6 line-graph-container">
+        <!-- Line graph to visualize prices per product name -->
+        <canvas id="productPriceLineChart" width="600" height="300"></canvas>
+      </div>
+    </div>
+    
+    <script>
+        // Get the product data from your Django view
+        const productData = {{ products|safe }};
+      
+        // Extract product names, counts, and prices as separate arrays
+        const productNames = productData.map(product => product.name);
+        const counts = productData.map(product => product.stock); // Extract stock (counts)
+        const prices = productData.map(product => product.price); // Extract prices
+      
+        // Function to generate random colors
+        function getRandomColor() {
+          const letters = '0123456789ABCDEF';
+          let color = '#';
+          for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+          }
+          return color;
+        }
+      
+        // Generate an array of random colors for the bar graph
+        const backgroundColors = productNames.map(() => getRandomColor());
+        const borderColors = productNames.map(() => getRandomColor());
+      
+        // Create a bar chart with random colors for both fill and border
+        const barChartCanvas = document.getElementById('productCountBarChart').getContext('2d');
+        new Chart(barChartCanvas, {
+          type: 'bar',
+          data: {
+            labels: productNames,
+            datasets: [{
+              label: 'Product Count',
+              data: counts,
+              backgroundColor: backgroundColors,
+              borderColor: borderColors,
+              borderWidth: 1,
+            }],
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      
+        // Create a line graph to visualize prices
+        const lineGraphCanvas = document.getElementById('productPriceLineChart').getContext('2d');
+        new Chart(lineGraphCanvas, {
+          type: 'line',
+          data: {
+            labels: productNames,
+            datasets: [{
+              label: 'Product Price',
+              data: prices,
+              fill: false, // Set to false to have an unfilled line graph
+              borderColor: 'blue', // You can specify a color for the line
+            }],
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: false, // Allow prices to start from non-zero
+              },
+            },
+          },
+        });
+      </script>
+  </body>
+{% endblock %}

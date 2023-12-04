@@ -1,0 +1,83 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Start your development with Meyawo landing page.">
+    <meta name="author" content="Devcrud">
+    <title>{% block title %}Admin Panel{% endblock %}</title>
+    <!--Tab Icon-->
+    <link rel="icon" type="image/x-icon" href="{% static 'imgs/FC_ICON.ico' %}">
+    <!-- font icons -->
+    <link rel="stylesheet" href="{% static 'vendors/themify-icons/css/themify-icons.css' %}">
+    <!-- Bootstrap + Steller  -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/meyawo.css' %}">
+    
+    <!-- CSS Bootstrap -->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body data-spy="scroll" data-target=".navbar" data-offset="40" id="home">
+    <!-- Page Navbar -->
+    <div>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" href="{%url 'fchub:dashboard'%}">Admin Panel</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Item
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="productsDropdown">
+                                <a class="dropdown-item" href="{% url 'fchub:inventory'  %}">Manage Inventory</a>
+                                <a class="dropdown-item" href="{% url 'fchub:materials'  %}">Manage Materials</a>
+                                <a class="dropdown-item" href="{% url 'fchub:curtain-ingredients'  %}">Manage Curtain Ingredients</a>
+                            </div>
+                        </li> 
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'fchub:dashboard'%}">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'fchub:customers'%}">Customer</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'fchub:orders'  %}">View Orders</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="productsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Products
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="productsDropdown">
+                                <a class="dropdown-item" href="{% url 'fchub:products'  %}">Manage Products</a>
+                                <a class="dropdown-item" href="{% url 'fchub:category'  %}">Manage Category</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="dataDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Data
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="dataDropdown">
+                                <a class="dropdown-item" href="{% url 'fchub:track-purchase' %}">Manage Purchase Data</a>
+                                <a class="dropdown-item" href="{% url 'fchub:manage-business'%}">Manage Business</a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'fchub:logout' %}" class="ml-4 mt-1 btn btn-light btn-sm">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

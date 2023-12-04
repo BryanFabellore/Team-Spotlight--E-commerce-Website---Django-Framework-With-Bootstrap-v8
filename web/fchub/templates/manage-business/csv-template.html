@@ -1,0 +1,252 @@
+{% include 'navbar/dashboard-side-navbar.html' %}
+{% block content %}
+<style>
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .csv-list {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .csv-list-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .csv-list-item a {
+        text-decoration: none;
+        color: #333;
+    }
+
+    .csv-list-item button {
+        margin-left: 10px;
+    }
+
+    /* Add a maximum height and scroll bar to the list container */
+    .csv-list-container {
+        max-height: 300px; /* Adjust the maximum height as needed */
+        overflow-y: auto;
+    }
+</style>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="text-center">Recent CSV File</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <!-- Define your table headers here -->
+                                        <th>Year</th>
+                                        <th>Month</th>
+                                        <th>Day</th>
+                                        <th>Location</th>
+                                        <th>Name</th>
+                                        <th>Fabric</th>
+                                        <th>Set</th>
+                                        <th>Color</th>
+                                        <th>Qty</th>
+                                        <th>Count</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if most_recent_csv %}
+                                        {% for row in most_recent_csv.csv_data %}
+                                            <tr>
+                                                {% for cell in row %}
+                                                    <td>{{ cell }}</td>
+                                                {% endfor %}
+                                            </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="11">No recent uploads to display information from.</td>
+                                        </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="text-center">Upload CSV File</h3>
+                </div>
+                <div class="card-body">
+                    {% if messages %}
+                        <div class="container mt-3">
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <form method="post" enctype="multipart/form-data" id="upload-csv-form">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-primary">Upload CSV</button>
+                        </div>
+                    </form>
+
+                    <div id="csv-error" class="container mt-3 alert alert-danger alert-dismissible fade show" role="alert" style="display: none">
+                        Unsupported file type. Please upload a valid file with one of the following extensions: .xlsx, .xls, .xlsm, .xlsb, .xltx, .xltm, .xlam, .csv, .ods, .xml, .txt, .prn, .dif, .slk, .htm, .html, .dbf, .json
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="text-center">View CSV</h3>
+                    <div class="text-center mt-3">
+                        <button type="button" class="btn btn-secondary reset-csv-button">Reset</button>
+                    </div>
+                </div>
+                <div class="card-body" style="max-height: 300px; overflow-y: auto;">
+                    <div id="view-csv-content">
+                        <!-- Table to display CSV data -->
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Year</th>
+                                    <th>Month</th>
+                                    <th>Day</th>
+                                    <th>Location</th>
+                                    <th>Name</th>
+                                    <th>Fabric</th>
+                                    <th>Set</th>
+                                    <th>Color</th>
+                                    <th>Qty</th>
+                                    <th>Count</th>
+                                    <th>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody id="csv-table-body">
+                                <!-- CSV data rows will be added here dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="text-center">All Uploaded CSV Files</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="csv-list csv-list-container">
+                        {% if csv_files %}
+                        {% for file in csv_files %}
+                        <li class="csv-list-item">
+                            <a href="{{ file.csv_file.url }}">{{ file.file_name }}</a>
+                            <form method="post" action="{% url 'fchub:delete-csv' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="file_id" value="{{ file.id }}">
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this CSV file?')">Delete</button>
+                            </form>
+                            <form method="post" action="{% url 'fchub:migrate-csv' csv_id=file.id %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="file_id" value="{{ file.id }}">
+                                <button type="submit" class="btn btn-primary btn-sm">Migrate</button>
+                            </form>
+                            <form method="post" action="{% url 'fchub:get-csv-data' file.id %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="file_id" value="{{ file.id }}">
+                                <button type="button" class="btn btn-info btn-sm view-csv-button" data-file-id="{{ file.id }}" data-csv-url="{% url 'fchub:get-csv-data' file.id %}">View CSV</button>
+                            </form>
+                        </li>
+                        {% endfor %}
+                        {% else %}
+                        <p>No files have been uploaded yet.</p>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const viewButtons = document.querySelectorAll(".view-csv-button");
+                const viewContent = document.getElementById("view-csv-content");
+                const csvTableBody = document.getElementById("csv-table-body");
+        
+                viewButtons.forEach(function (button) {
+                    button.addEventListener("click", function () {
+                        const fileId = button.getAttribute("data-file-id");
+                        const url = button.getAttribute("data-csv-url"); // Get the URL from the data attribute
+        
+                        fetch(url)
+                            .then((response) => {
+                                if (!response.ok) {
+                                    throw new Error(`Network response was not ok: ${response.status}`);
+                                }
+                                return response.text();
+                            })
+                            .then((data) => {
+                                // Display the CSV data in the viewContent element and table
+                                viewContent.innerHTML = "<pre>" + data + "</pre>";
+                                displayCSVData(data);
+                            })
+                            .catch((error) => {
+                                console.error("Error fetching CSV data:", error);
+                                viewContent.innerHTML = "Error loading CSV data.";
+                            });
+                    });
+                });
+        
+                // Add an event listener to the "Reset" button
+                const resetButton = document.querySelector(".reset-csv-button");
+        
+                resetButton.addEventListener("click", function () {
+                    // Reset the contents by setting innerHTML to an empty string
+                    viewContent.innerHTML = "";
+                    csvTableBody.innerHTML = "";
+                });
+        
+                // Function to display CSV data in the table
+                function displayCSVData(data) {
+                    csvTableBody.innerHTML = ""; // Clear previous data
+                    const rows = data.split("\n");
+                    for (const row of rows) {
+                        const cells = row.split(",");
+                        const rowElement = document.createElement("tr");
+                        for (const cell of cells) {
+                            const cellElement = document.createElement("td");
+                            cellElement.textContent = cell;
+                            rowElement.appendChild(cellElement);
+                        }
+                        csvTableBody.appendChild(rowElement);
+                    }
+                }
+            });
+        </script>        
+{% endblock %}

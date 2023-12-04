@@ -1,0 +1,30 @@
+{% extends 'navbar/dashboard-navbar.html' %}
+{% block content %}
+<div class="container">
+    <div class="panel panel-danger">
+        <div class="panel-heading text-center">
+            <h2 class="text-dark">Confirm Deletion</h2>
+        </div>
+        <div class="panel-body">
+            <h3>Are you sure you want to delete this purchase record?</h3>
+
+            <p><strong>Product ID:</strong> {{ purchase.id }}</p>
+            <p><strong>Fabric Type:</strong> {{ purchase.fabric_type }}</p>
+            <p><strong>Payment:</strong> {{ purchase.payment }}</p>
+            <p><strong>Price:</strong> {{ purchase.price }}</p>
+            <p><strong>Color:</strong> {{ purchase.color }}</p>
+            <p><strong>Product Tag:</strong> {{ purchase.get_product_tag_display }}</p>
+            <p><strong>Set Tag:</strong> {{ purchase.set_tag }}</p>
+            <p><strong>Month of Purchase:</strong> {{ purchase.get_month_of_purchase_display }}</p>
+            <p><strong>Quantity:</strong> {{ purchase.qty }}</p>
+            <p><strong>Count:</strong> {{ purchase.count }}</p>
+
+            <form method="post" action="{% url 'fchub:delete-purchase' purchase.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                <a class="btn btn-secondary" href="{% url 'fchub:track-purchase' %}">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

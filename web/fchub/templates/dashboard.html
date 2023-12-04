@@ -1,0 +1,99 @@
+{% extends 'navbar/dashboard-navbar.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>Welcome to Your Dashboard</h1>
+        </div>
+        
+        <div class="user-info">
+            <div class="user-details">
+                <h2 class="username text-primary">Active User: {{ request.user }}</h2>
+                <h3 class="employee-name">Employee Name: {{ active.first_name }} {{ active.last_name }}</h3>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-3 mb-4">
+                <div class="card bg-c-blue order-card">
+                    <div class="card-block">
+                        <h4 class="m-b-20 text-secondary">Order Count</h4>
+                        <h1 class="text-secondary">
+                            <span class="f-right text-secondary">
+                                &nbsp; <i class="fa-solid fa-cart-shopping" style="color: #000000;"></i> &nbsp; {{ order_count }}
+                            </span>
+                        </h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card bg-c-blue order-card">
+                    <div class="card-block">
+                        <h4 class="m-b-20 text-secondary">Product Count</h4>
+                        <h1 class="text-secondary">
+                            <span class="f-right text-secondary">
+                                &nbsp; <i class="fa-solid fa-store" style="color: #000000;"></i> &nbsp; {{ product_count }}
+                            </span>
+                        </h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card bg-c-blue order-card">
+                    <div class="card-block">
+                        <h4 class="m-b-20 text-secondary">Customer Count</h4>
+                        <h1 class="text-secondary">
+                            <span class="f-right text-secondary">
+                                &nbsp; <i class="fa-solid fa-users" style="color: #000000;"></i> &nbsp; {{ customer_count }}
+                            </span>
+                        </h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card bg-c-blue order-card">
+                    <div class="card-block">
+                        <h4 class="m-b-20 text-secondary">Pending Orders</h4>
+                        <h1 class="text-secondary">
+                            <span class="f-right text-secondary">
+                                &nbsp; <i class="fa-solid fa-clock" style="color: #000000;"></i> &nbsp; {{ pending_order_count }}
+                            </span>
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <h4 class="text-secondary">Recent Orders</h4>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Order Number</th>
+                            <th>Product(s)</th>
+                            <th>Ordered By</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for products, ordered_by, order in data %}
+                            <tr>
+                                <td>{{ order.order_number }}</td>
+                                <td>
+                                    <ul>
+                                        {% for product in products %}
+                                            <li>{{ product.name }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                                <td>{{ ordered_by.first_name }} {{ ordered_by.last_name }}</td>
+                                <td>{{ order.status }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+{% endblock content %}

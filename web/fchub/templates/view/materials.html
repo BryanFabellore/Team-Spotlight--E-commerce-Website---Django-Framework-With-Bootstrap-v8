@@ -1,0 +1,120 @@
+{% extends 'navbar/dashboard-navbar.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading text-center">
+      <h2 class="text-dark">Regular Materials</h2>
+    </div>
+    <table class="table table-hover table-bordered" id="regular-materials-table">
+      <thead>
+        <tr>
+          <th>Material ID</th>
+          <th>Type</th>
+          <th>Name</th>
+          <th>Unit</th>
+          <th>Count</th>
+          <th>Quantity</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      {% for material in regular_materials %}
+      <tr>
+        <td>{{ material.Custom_material_id }}</td>
+        <td>{{ material.type }}</td>
+        <td>{{ material.name }}</td>
+        <td>{{ material.unit }}</td>
+        <td>{{ material.count }}</td>
+        <td>{{ material.qty }}</td>
+        <td>{{ material.description }}</td>
+        <td>
+          <div class="container" margin="40px">
+            <a class="btn btn-primary rounded btn-xs" href="{% url 'fchub:edit-regular-material' material.id %}">Edit</a>
+            <a class="btn btn-danger rounded btn-xs" href="{% url 'fchub:delete-regular-material' material.id %}">Delete</a>                     
+          </div>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="6" class="text-center">No Regular Materials!</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading text-center">
+      <h2 class="text-dark">Fabric Materials</h2>
+    </div>
+    <table class="table table-hover table-bordered" id="fabric-materials-table">
+      <thead>
+        <tr>
+          <th>Fabric Material ID</th>
+          <th>Fabric Name</th>
+          <th>Fabric</th>
+          <th>Color</th>
+          <th>Count</th>
+          <th>Quantity</th>
+          <th>Unit</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      {% for fabric_material in fabric_materials %}
+      <tr>
+        <td>{{ fabric_material.fabric_material_id }}</td>
+        <td>{{ fabric_material.fabric_name }}</td>
+        <td>{{ fabric_material.fabric }}</td>
+        <td>{{ fabric_material.color }}</td>
+        <td>{{ fabric_material.fabric_fcount }}</td>
+        <td>{{ fabric_material.fabric_qty }}</td>
+        <td>{{ fabric_material.fabric_unit }}</td>
+        <td>{{ fabric_material.fabric_description }}</td>
+        <td>
+          <div class="container" margin="40px">
+            <a class="btn btn-primary rounded btn-xs" href="{% url 'fchub:edit-fabric-material' fabric_material.id %}">Edit</a>
+            <a class="btn btn-danger rounded btn-xs" href="{% url 'fchub:delete-fabric-material' fabric_material.id %}">Delete</a>                     
+          </div>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="7" class="text-center">No Fabric Materials!</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+
+<!-- add materials floating button -->
+<div class="float-button">
+  <a href="{% url 'fchub:choose-material' %}" class="btn btn-primary btn-float">
+      <i class="fa-solid fa-plus"></i> 
+  </a>
+</div>
+
+<style>
+  .float-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+  }
+
+  .btn-float {
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+      text-align: center;
+      padding: 10px;
+      background: #008000;
+      color: #fff;
+      text-decoration: none;
+      display: inline-block;
+  }
+</style>
+
+{% endblock content %}

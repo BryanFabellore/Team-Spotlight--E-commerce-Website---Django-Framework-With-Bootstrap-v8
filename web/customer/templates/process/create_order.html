@@ -1,0 +1,31 @@
+<!-- create_order.html -->
+{% extends 'customer/navbar.html' %}
+
+{% block content %}
+<h1>Order Details</h1>
+<p>Order for {{ user.username }}</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cart_product in cart_products %}
+        <tr>
+            <td>{{ cart_product.product.name }}</td>
+            <td>{{ cart_product.quantity }}</td>
+            <td>${{ cart_product.subtotal }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<p>Total Cost: ${{ total_cost }}</p>
+<p>Shipping Address: {{ shipping_address }}</p>
+
+<a href="{% url 'customer:pay-online' %}">Confirm Order</a>
+{% endblock %}

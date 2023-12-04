@@ -1,0 +1,112 @@
+{% extends 'navbar/dashboard-navbar.html' %}
+{% block title %}Admin Panel - View Orders{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">View Orders</h2>
+
+    <!-- Filter options -->
+    <form method="get">
+        <div class="row">
+            <div class="col-md-2 mb-3">
+                <label for="order_id" class="form-label">Order ID:</label>
+                <input type="text" class="form-control" name="order_id" id="order_id" value="{{ request.GET.order_id|default:'' }}">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label for="order_date" class="form-label">Order Date:</label>
+                <input type="date" class="form-control" name="order_date" id="order_date" value="{{ request.GET.order_date|default:'' }}">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label for="order_status" class="form-label">Order Status:</label>
+                <select class="form-select" name="order_status" id="order_status">
+                    <option value="">All</option>
+                    {% for status_choice in status_choices %}
+                        <option value="{{ status_choice.0 }}" {% if request.GET.order_status == status_choice.0 %}selected{% endif %}>
+                            {{ status_choice.1 }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2 mb-3">
+                <label for="total_price" class="form-label">Total Price:</label>
+                <select class="form-select" name="total_price" id="total_price">
+                    <option value="">All</option>
+                    <option value="low_to_high" {% if request.GET.total_price == "low_to_high" %}selected{% endif %}>Low to High</option>
+                    <option value="high_to_low" {% if request.GET.total_price == "high_to_low" %}selected{% endif %}>High to Low</option>
+                </select>
+            </div>
+            <div class="col-md-2 mb-3">
+                <label for="payment_type" class="form-label">Payment Type:</label>
+                <select class="form-select" name="payment_type" id="payment_type">
+                    <option value="">All</option>
+                    <option value="Online Payment" {% if request.GET.payment_type == "Online Payment" %}selected{% endif %}>Online Payment</option>
+                    <option value="Cash on Delivery (COD)" {% if request.GET.payment_type == "Cash on Delivery (COD)" %}selected{% endif %}>Cash on Delivery (COD)</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-flex align-items-end mb-3">
+               <br>
+            </div>
+            <div class="col-md-2 d-flex align-items-end mb-3">
+                <button type="submit" class="btn btn-primary">Apply Filters</button>
+            </div>
+            <div class="col-md-2 d-flex align-items-end mb-3">
+                <a href="{% url 'fchub:orders' %}" class="btn btn-secondary">Reset Filters</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 offset-md-10 d-flex align-items-end">
+                <a href="{% url 'fchub:successful-orders' %}" class="btn btn-success">Successful Orders</a>
+            </div>
+        </div>
+    </form>
+
+    <table class="table table-hover table-bordered" id="order-table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Ordered Products</th>
+                <th>Type of Payment</th>
+                <th>Ordered By</th>
+                <th>Order Date</th>
+                <th>Order Status</th>
+                <th>Total Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ordered_products, ordered_by, order in data %}
+                {% if order.status != "Delivered" %}
+                    <tr>
+                        <td>{{ order.order_number }}</td>
+                        <td>
+                            <ul>
+                                {% for ordered_product in ordered_products %}
+                                    <li>{{ ordered_product.product.name }} x{{ ordered_product.quantity }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td>{{ order.payment_method }}</td>
+                        <td>{{ ordered_by.first_name }} {{ ordered_by.last_name }}</td>
+                        <td>{{ order.order_date }}</td>
+                        <td>{{ order.status }}</td>
+                        <td>₱{{ order.total_price }}</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="{% url 'fchub:update-status' order.id %}" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-edit fa-lg"></i> <!-- Larger Icon for Change Status -->
+                                </a>
+                                <a href="{% url 'fchub:generate-invoice' order.id %}" target="_blank" class="btn btn-success btn-sm">
+                                    <i class="fas fa-download fa-lg"></i> <!-- Larger Icon for Download Order -->
+                                </a>
+                                <a href="{% url 'fchub:full-details' order.id %}" class="btn btn-info btn-sm">
+                                    <i class="fas fa-info-circle fa-lg"></i> <!-- Larger Icon for View Details -->
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

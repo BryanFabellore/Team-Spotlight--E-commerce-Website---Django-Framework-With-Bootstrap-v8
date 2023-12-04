@@ -1,0 +1,51 @@
+{% include 'navbar/dashboard-side-navbar.html' %}
+
+{% block content %}
+<div id="layoutSidenav_content">
+    <div class="card">
+        <div class="card-header">
+            Clock
+        </div>
+        <div class="card-body" id="clock-card">
+            <!-- Clock will be displayed here -->
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Add some custom CSS for better styling */
+    .card {
+        margin-bottom: 20px;
+    }
+
+    .card-header {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function updateClock() {
+        const now = new Date();
+        const options = {
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            hour12: true
+        };
+        const timeString = now.toLocaleString('en-US', options);
+        $('#clock-card').html(`<h2>${timeString}</h2>`);
+    }
+
+    // Call the function to update the clock
+    updateClock();
+
+    // Update the clock every second
+    setInterval(updateClock, 1000);
+</script>
+{% endblock %}

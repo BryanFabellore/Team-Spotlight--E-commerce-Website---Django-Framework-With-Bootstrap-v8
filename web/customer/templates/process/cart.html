@@ -1,0 +1,277 @@
+{% extends 'customer/navbar.html' %}
+{% load static %}
+{% block content %}
+  {% if redirect_to %}
+    <script>
+      location.replace("{{ redirect_to }}");
+    </script>
+  {% endif %}
+
+  <style>
+    /* Container style */
+    .cart-container {
+      background-color: #f8f8f8;
+      font-family: 'Arial', sans-serif;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Cart title style */
+    .cart-title {
+      text-align: center;
+      color: #333;
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    /* Cart table style */
+    .cart-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .cart-table th,
+    .cart-table td {
+      border: 1px solid #ddd;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .cart-table th {
+      background-color: #f7f7f7;
+      font-weight: bold;
+    }
+
+    .cart-table img {
+      max-width: 100px;
+      max-height: 100px;
+    }
+
+    /* Cart actions style */
+    .cart-actions {
+      text-align: right;
+      margin-top: 20px;
+    }
+
+    .total-price {
+      font-weight: bold;
+      font-size: 1.25rem;
+      color: #333;
+    }
+
+    .purchase-button,
+    .clear-all-button {
+      background-color: #695aa6;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    .purchase-button:hover {
+      background-color: #0BB100;
+    }
+
+    .clear-all-button:hover {
+      background-color: #DF0C02;
+    }
+
+    /* Quantity controls style */
+    .quantity-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .quantity-controls button {
+      background-color: #695aa6;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      font-size: 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 0 5px;
+    }
+
+    .delete-button {
+      background-color: #e74c3c;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .delete-button:hover {
+      background-color: #d14030;
+    }
+
+    /* Notification style */
+    .notification {
+      background-color: #4CAF50;
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      display: none;
+      z-index: 999;
+      border-radius: 5px;
+    }
+  </style>
+  <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script>
+    function confirmDelete(productName, productID) {
+      if (confirm(`Are you sure you want to delete ${productName} from your cart?`)) {
+        document.getElementById('deleteNotification').style.display = 'block';
+  
+        // Auto-hide the notification message after a few seconds
+        setTimeout(function () {
+          document.getElementById('deleteNotification').style.display = 'none';
+          window.location.href = `/customer/remove-from-cart/${productID}`;
+        }, 1000);
+  
+        return true;
+      } else {
+        return false;
+      }
+    }
+  
+    function confirmClearAll() {
+      if (confirm("Are you sure you want to clear all items from your cart?")) {
+        window.location.href = "/customer/clear-cart"; // Redirect to clear cart URL
+      }
+    }
+  
+    function increaseQuantity(productID) {
+      const quantityInput = document.getElementById(`quantity-${productID}`);
+      quantityInput.value = parseInt(quantityInput.value) + 1;
+      updateQuantity(productID);
+    }
+  
+    function decreaseQuantity(productID) {
+      const quantityInput = document.getElementById(`quantity-${productID}`);
+      if (parseInt(quantityInput.value) > 1) {
+        quantityInput.value = parseInt(quantityInput.value) - 1;
+        updateQuantity(productID);
+      }
+    }
+    function updateQuantity(productID) {
+      const quantityInput = document.getElementById(`quantity-${productID}`);
+      const newQuantity = parseInt(quantityInput.value);
+    
+      if (!isNaN(newQuantity) && newQuantity >= 1) {
+        const url = `/customer/update-quantity/${productID}`;
+    
+        $.ajax({
+          url: url,
+          type: 'POST',
+          data: { quantity: newQuantity },  // Send the new quantity as POST data
+          dataType: 'json',
+          success: function (data) {
+            $('#total-price').text(`Total ₱ ${data.total_price.toFixed(2)}`);
+          },
+          error: function (xhr, status, error) {
+            console.error(xhr.responseText); // Log the detailed error message
+            alert('Failed to update quantity. Please try again.');
+          }
+        });
+      } else {
+        console.error('Invalid quantity');
+        alert('Please enter a valid quantity.');
+      }
+    }
+    
+    
+    
+    
+    
+    
+  </script>
+  
+
+
+  <div class="container cart-container">
+    <h3 class="cart-title">My Cart</h3>
+    <table class="cart-table">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Product Name</th>
+          <th>Description</th>
+          <th>Price (₱)</th>
+          <th>Quantity</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart_items %}
+          <tr>
+            <td><img src="{{ item.product.product_image.url }}" alt="{{ item.product.name }}" /></td>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.product.description }}</td>
+            <td>₱ {{ item.product.price }}</td>
+            <td> <span id="quantity-{{ item.product.id }}">{{ item.quantity }}</span> 
+              <form method="post" action="{% url 'customer:update-quantity' item.product.id %}">
+                {% csrf_token %}
+                <input type="number" name="quantity" value="{{ item.quantity }}" min="1">
+                <button type="submit">Update</button>
+              </form>
+            </td>
+            <td>
+              <div class="quantity-controls">
+                
+                <a href="{% url 'customer:increase-quantity' item.product.pk %}" class="quantity-button-link"><i class="fa-solid fa-plus fa-sm" style="color: #ffffff;"></i></a>                
+                <a href="{% url 'customer:decrease-quantity' item.product.pk %}" class="quantity-button-link"><i class="fa-solid fa-minus fa-sm" style="color: #ffffff"></i> </a>
+                <button class="delete-button" onclick="confirmDelete('{{ item.product.name }}', '{{ item.product.id }}')">DELETE</button>
+
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="cart-actions">
+      <span id="total-price" class="total-price">Total ₱ {{ total_price }}</span>
+      <a href="{% url 'customer:proceed-purchase' %}">
+        <button class="purchase-button">Purchase</button>
+      </a>
+      <button class="clear-all-button" onclick="confirmClearAll()" href="{% url 'customer:clear-cart' %}">Clear Cart</button>
+    </div>
+  </div>
+
+  <!-- Notification message -->
+  <div class="notification" id="deleteNotification">Product successfully deleted</div>
+
+  <script src="{% static 'vendors/jquery/jquery-3.4.1.js' %}"></script>
+</div>
+<style>
+  .quantity-button-link {
+    text-decoration: none; /* Remove the default underline */
+    background-color: #695aa6;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 5px;
+    display: inline-block; /* Ensure they appear as inline elements */
+  }
+
+  .quantity-button-link:hover {
+    background-color: #0BB100;
+  }
+</style>
+{% endblock content %}

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+{% load static %}
+<head>
+  <meta charset="utf-8">
+  <style>
+    @page {
+      size: A4 landscape; /* Set the page size to landscape */
+      margin: 1cm;
+      @frame footer {
+        -pdf-frame-content: footerContent;
+        bottom: 0cm;
+        margin-left: 9cm;
+        margin-right: 9cm;
+        height: 1cm;
+      }
+    }
+
+    .invoice-box {
+      max-width: 800px;
+      margin: auto;
+      padding: 10px; /* Reduce padding to save space */
+      border: 1px solid #eee;
+      box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+      font-size: 12px; /* Reduce font size for compactness */
+      line-height: 16px; /* Adjust line height for smaller text */
+      font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+      color: #555;
+    }
+
+    .invoice-box table {
+      width: 100%;
+      line-height: inherit;
+      text-align: left;
+    }
+
+    .invoice-box table td {
+      padding: 5px;
+      vertical-align: top;
+    }
+
+    .invoice-box table tr td:nth-child(2) {
+      text-align: right;
+    }
+
+    .invoice-box h2 {
+      font-size: 14px; /* Reduce font size for section headings */
+      margin-bottom: 5px;
+    }
+
+    .invoice-box p {
+      margin: 3px 0; /* Reduce vertical spacing for paragraphs */
+    }
+
+    .invoice-box table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    .invoice-box table th,
+    .invoice-box table td {
+      border: none; /* Remove borders for compactness */
+      padding: 3px; /* Reduce cell padding */
+    }
+
+    /* Remove horizontal line */
+    .hr {
+      border: 0;
+      border-top: 0;
+      margin: 0;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="invoice-box">
+    <table cellpadding="0" cellspacing="0">
+      <tr class="top">
+        <td colspan="2">
+          <table class="table table-bordered table-striped">
+            <tr>
+              <td class="title">
+                <h5>Fleeky Hub</h5>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <tr class="information">
+        <td>
+          <h2>Customer Information</h2>
+          Name: {{ customer_profile.first_name }} {{ customer_profile.last_name }}<br>
+          Email: {{ customer_profile.email }}<br>
+          Phone Number: {{ customer_profile.phone_number }}<br>
+        </td>
+        <td>
+          <h2>Shipping Address</h2>
+          {{ shipping_address.region }}, {{ shipping_address.province }}, {{ shipping_address.city }},<br>
+          {{ shipping_address.barangay }}, {{ shipping_address.street }}, {{ shipping_address.zipcode }}<br>
+        </td>
+      </tr>
+
+      <tr class="information">
+        <td>
+          <h2>Order Details</h2>
+          Order Number: {{ order.order_number }}<br>
+          Order Date: {{ order.order_date }}<br>
+          Order Status: {{ order.status }}<br>
+        </td>
+        <td>
+          <h2>Billing Breakdown</h2>
+          VAT (12%): PHP{{ vat }}<br>
+          Shipping Fee: PHP {{ shipping_fee }}<br>
+          Total Price with VAT and Shipping: PHP{{ total_price }}<br>
+        </td>
+      </tr>
+
+      <tr class="information">
+        <td>
+          <h2>Order Items</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Total Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in order_items %}
+                <tr>
+                  <td>{{ item.product.name }}</td>
+                  <td>{{ item.quantity }}</td>
+                  <td>{{ item.product.price }}</td>
+                  <td>{{ item.item_total }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <h2>Total Price: PHP {{ total_price }}</h2>
+        </td>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>

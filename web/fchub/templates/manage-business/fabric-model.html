@@ -1,0 +1,143 @@
+
+<head>
+    <title>Fabric Linear Regression Model</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            background-color: #007bff;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        form {
+            text-align: center;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        p {
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+    </style>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<body>
+    <h1>Fabric Linear Regression Model</h1>
+    <div>
+        &nbsp; &nbsp; <button onclick="window.location.href='{% url 'fchub:sales-for-fabric-list' %}'">Back</button>
+    </div>
+    <h2>Training the Model</h2>
+    <ul>
+        {% for step_data in steps_data %}
+        <li>{{ step_data }}</li>
+        {% endfor %}
+    </ul>
+    <form method="post" action="{% url 'fchub:train-linear-regression-fabric' %}">
+        {% csrf_token %}
+        <button type="submit" name="train_model" value="train_model">Train Model</button>
+    </form>
+
+    <h2>Show Model Output</h2>
+    {% if prediction %}
+    <p>Predicted sales for the most common fabric type and latest date:</p>
+    <p>Sales: {{ prediction }}</p>
+    <div id="scatter-plot"></div>
+    {% else %}
+    <p>No model has been trained yet. Please train the model first.</p>
+    {% endif %}
+
+
+</body>
+<script>
+    // Make an AJAX request to your Django view
+    fetch('/fchub/show-linear-regression-fabric/', { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                console.error(data.error);
+                return;
+            }
+
+            // Extract data
+            const prediction = data.prediction;
+            const actualDataX = data.actual_data_x;
+            const actualDataY = data.actual_data_y;
+            const r2Score = data.r2_score;
+
+            // Create a scatter plot using Plotly
+            const trace1 = {
+                x: actualDataX,
+                y: actualDataY,
+                mode: 'markers',
+                type: 'scatter',
+                name: 'Actual Data'
+            };
+
+            const trace2 = {
+                x: actualDataX,
+                y: Array(actualDataX.length).fill(prediction),
+                mode: 'lines',
+                type: 'scatter',
+                name: 'Linear Regression Line'
+            };
+
+            const layout = {
+                title: 'Fabric Linear Regression Model',
+                xaxis: { title: 'Month' },
+                yaxis: { title: 'Sales' },
+                annotations: [
+                    {
+                        x: 0.8,
+                        y: 0.1,
+                        xref: 'paper',
+                        yref: 'paper',
+                        text: `R-squared: ${r2Score.toFixed(4)}`,
+                        showarrow: false,
+                        font: {
+                            size: 14
+                        }
+                    }
+                ]
+            };
+
+            const data = [trace1, trace2];
+
+            Plotly.newPlot('scatter-plot', data, layout);
+        })
+        .catch(error => console.error('Error:', error));
+</script>
+

@@ -1,0 +1,58 @@
+{% extends 'navbar/dashboard-navbar.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center text-dark">Edit Purchase</h1>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.fabric_type.id_for_label }}">Fabric Type</label>
+                    {{ form.fabric_type|add_class:"form-control" }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.payment.id_for_label }}">Payment</label>
+                    {{ form.payment|add_class:"form-control" }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.price.id_for_label }}">Price</label>
+                    {{ form.price|add_class:"form-control" }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.color.id_for_label }}">Color</label>
+                    {{ form.color|add_class:"form-control" }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.product_tag.id_for_label }}">Product Tag</label>
+                    {{ form.product_tag|add_class:"form-control" }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.set_tag.id_for_label }}">Set Tag</label>
+                    {{ form.set_tag|add_class:"form-control" }}
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.month_of_purchase.id_for_label }}">Month of Purchase</label>
+                    {{ form.month_of_purchase|add_class:"form-control" }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.qty.id_for_label }}">Quantity</label>
+                    {{ form.qty|add_class:"form-control" }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.count.id_for_label }}">Count</label>
+                    {{ form.count|add_class:"form-control" }}
+                </div>
+            </div>
+        </div>
+      
+        <div class="d-grid gap-2 col-6 mx-auto mt-3">
+            <button type="submit" class="btn btn-dark btn-lg text-light">Update</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}

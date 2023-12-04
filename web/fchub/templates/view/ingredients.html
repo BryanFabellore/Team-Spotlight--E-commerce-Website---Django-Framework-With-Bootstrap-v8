@@ -1,0 +1,116 @@
+{% extends 'navbar/dashboard-navbar.html' %}
+{% block content %}
+<head>
+    <title>All Curtain Components</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom CSS styles */
+        .ingredient-box {
+            display: inline-block;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .ingredient-box:hover {
+            background-color: #f7f7f7;
+        }
+        .ingredient-details {
+            display: none;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #f7f7f7;
+        }
+        .ingredient-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .ingredient-table th, .ingredient-table td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            text-align: left;
+        }
+        .no-data {
+            margin-top: 20px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>All Curtain Components</h2>
+        {% if curtain_ingredients %}
+            {% for curtain_ingredient in curtain_ingredients %}
+                <div class="ingredient-box" onclick="toggleDetails('{{ curtain_ingredient.id }}')">
+                    <p>{{ curtain_ingredient.name }}</p>
+                    
+                    <table id="details-{{ curtain_ingredient.id }}" class="ingredient-details ingredient-table">
+                        <tr>
+                            <th>Fabric</th>
+                            <th>Fabric Count</th>
+                            <th>Fabric Unit</th>
+                            <th>Grommet Count</th>
+                            <th>Grommet Unit </th>
+                            <th>Rings Count </th>
+                            <th>Rings Unit </th>
+                            <th>Thread Count </th>
+                            <th>Thread Unit</th>
+                            <th>Length</th>
+                            <th>Length Unit</th>
+                            <th>Curtain Custom ID</th>
+                            <th>Actions</th>
+                            <!-- Include other ingredient details here as additional columns -->
+                        </tr>
+                        <tr>
+        
+                            <td>{{ curtain_ingredient.fabric }}</td>
+                            <td>{{ curtain_ingredient.fabric_count }}</td>
+                            <td>{{ curtain_ingredient.fabric_unit }}</td>
+                            <td>{{ curtain_ingredient.grommet_count }}</td>
+                            <td>{{ curtain_ingredient.grommet_unit }}</td>
+                            <td> {{ curtain_ingredient.rings_count }}</td>
+                            <td>{{ curtain_ingredient.rings_unit }}</td>
+                            <td>{{ curtain_ingredient.thread_count }}</td>
+                            <td>{{ curtain_ingredient.thread_unit }}</td>
+                            <td> {{ curtain_ingredient.length }}</td>
+                            <td>{{ curtain_ingredient.length_unit }}</td>
+                            <td>{{ curtain_ingredient.curtain_custom_id }}</td>
+                            <td>
+                            <a href="{% url 'fchub:edit-ingredient' curtain_ingredient.id %}">Edit</a> 
+                            <hr>
+                            <a href="{% url 'fchub:delete-ingredient' curtain_ingredient.id %}">Delete</a>
+                            </td>
+                            <!-- Include other ingredient details here as additional columns -->
+                        </tr>
+                    </table>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-data">No data available.</div>
+        {% endif %}
+
+    <div>
+        <a href="{% url 'fchub:add-ingredients' %}" class="btn btn-primary btn-float">
+            <i class="fa-solid fa-plus"></i>
+        </a>
+    </div>
+    </div>
+
+ 
+
+    <script>
+        function toggleDetails(id) {
+            var details = document.getElementById('details-' + id);
+            if (details.style.display === 'none') {
+                details.style.display = 'block';
+            } else {
+                details.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+{% endblock %}

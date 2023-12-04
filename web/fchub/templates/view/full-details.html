@@ -1,0 +1,185 @@
+{% extends 'navbar/dashboard-navbar.html' %}
+
+{% block title %}Full Order Details{% endblock %}
+
+{% block content %}
+<style>
+    .order-details-container {
+        background-color: #f0f0f0;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 80%;
+        margin: 20px auto;
+    }
+
+    .order-details-container h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .order-details-text {
+        font-size: 16px;
+        margin-bottom: 10px;
+        color: #555;
+    }
+
+    .image {
+        max-width: 150px;
+        height: auto;
+        margin: 10px 0;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .order-items-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .order-item {
+        font-size: 16px;
+        margin-bottom: 20px;
+        color: #555;
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .item-image {
+        align-self: flex-start;
+        margin-right: 20px;
+    }
+
+    .item-details {
+        flex-grow: 1;
+    }
+
+    .item-label {
+        font-weight: bold;
+        color: #212529;
+    }
+
+    .item-description {
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+    .item-quantity {
+        font-size: 14px;
+    }
+
+    .item-category {
+        font-size: 14px;
+    }
+
+    .item-color {
+        font-size: 14px;
+    }
+
+    .total-price {
+        font-size: 18px;
+        margin-top: 20px;
+        font-weight: bold;
+        color: #555;
+    }
+
+    .separator {
+        margin-top: 20px;
+        border: 0.5px solid #ddd;
+    }
+
+    .button {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #007BFF;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+    .order-status {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .status-icon {
+        font-size: 20px;
+        margin-right: 10px;
+    }
+
+    .status-pending {
+        color: #ff0000;
+    }
+
+    .status-confirmed {
+        color: #c2b800;
+    }
+
+    .status-delivery {
+        color: #f58f00;
+    }
+
+    .status-delivered {
+        color: #0cb800;
+    }
+</style>
+
+<div class="order-details-container">
+    <p class="order-status">
+        {% if order.status == 'Pending' %}
+        <span class="status-icon status-pending"><i class="fas fa-spinner"></i></span>
+        Pending
+        {% elif order.status == 'Order Confirmed' %}
+        <span class="status-icon status-confirmed"><i class="fas fa-circle-check"></i></span>
+        Order Confirmed
+        {% elif order.status == 'Out for Delivery' %}
+        <span class="status-icon status-delivery"><i class="fas fa-truck"></i></span>
+        Out for Delivery
+        {% elif order.status == 'Delivered' %}
+        <span class="status-icon status-delivered"><i class="fas fa-check-double"></i></span>
+        Delivered
+        {% endif %}
+    </p>
+    <h2 class="order-details-text">Full Order Details</h2>
+
+    <p class="order-details-text"><span class="item-label">Order Number:</span> {{ order.order_number }}</p>
+
+    <p class="order-details-text"><span class="item-label">Customer:</span> {{ customer_profile.first_name }} {{ customer_profile.last_name }}</p>
+    
+    <p class="order-details-text"><span class="item-label">Customer Username:</span> {{ customer_profile.user.username }}</p>
+    
+    <p class="order-details-text"><span class="item-label">Customer ID:</span> {{ customer_profile.custom_id }}</p>
+    
+    <p class="order-details-text"><span class="item-label">Shipping Address:</span> {{ shipping_address.region }}, {{ shipping_address.province }}, {{ shipping_address.city }}, {{ shipping_address.barangay }}, {{ shipping_address.street }}, {{ shipping_address.detailed_address }}, {{ shipping_address.zipcode }}</p>
+    
+    <p class="order-details-text"><span class="item-label">Payment Type:</span> {{ order.payment_method }}</p>
+    
+    <p class="order-details-text"><span class="item-label">Phone Number:</span> {{ customer_profile.phone_number }}</p>
+    
+    <hr class="separator">
+    
+    <p class="order-details-text"><span class="item-label">Order Items:</span></p>
+    <ul class="order-items-list">
+        {% for item in order_items %}
+            <li class="order-item">
+                <div class="item-image">
+                    <img class="image" src="{{ item.product.product_image.url }}" alt="{{ item.product.name }}" />
+                </div>
+                <div class="item-details">
+                    <p class="item-description"><span class="item-label">Product Name:</span> {{ item.product.name }}</p>
+                    <p class="item-description"><span class="item-label">Product Description:</span> {{ item.product.description }}</p>
+                    <p class="item-category"><span class="item-label">Category:</span> {{ item.product.category }}</p>
+                    <p class="item-color"><span class="item-label">Color:</span> {{ item.product.color }}</p>
+                    <p class="item-quantity"><span class="item-label">Quantity:</span> {{ item.quantity }}</p>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <p class="total-price"><span class="item-label">Total Price:</span> {{ order.total_price }}</p>
+
+    <a class="button" href="{% url 'fchub:orders' %}">Back to Orders List</a>
+</div>
+{% endblock %}

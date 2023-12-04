@@ -1,0 +1,156 @@
+{% extends 'navbar/dashboard-navbar.html' %}
+{% load static %}
+{% block content %}
+<head></head>
+
+<div class="container">
+    <div class="panel panel-primary">
+        <div class="panel-heading text-center">
+            <h2 class="text-dark">Purchase List</h2>
+        </div>
+        <div class="filter-form">
+            <form method="get">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="price">Price:</label>
+                            <select class="form-control" id="price" name="price">
+                                <option value="low_to_high">Low to High</option>
+                                <option value="high_to_low">High to Low</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="count">Count:</label>
+                            <select class="form-control" id="count" name="count">
+                                <option value="low_to_high">Low to High</option>
+                                <option value="high_to_low">High to Low</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="product_tag">Product Tag:</label>
+                            <select class="form-control" id="product_tag" name="product_tag">
+                                <option value="">All</option>
+                                <option value="1">Blockout</option>
+                                <option value="2">5-in-1 Katrina</option>
+                                <option value="3">3-in-1 Katrina</option>
+                                <option value="4">Tieback Holder</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="set_tag">Set Tag:</label>
+                            <select class="form-control" id="set_tag" name="set_tag">
+                                <option value="">All</option>
+                                <option value="5-in-1">5-in-1</option>
+                                <option value="3-in-1">3-in-1</option>
+                                <option value="Single">Single</option>
+                                <option value="None">None</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="month_of_purchase">Month of Purchase:</label>
+                            <select class="form-control" id="month_of_purchase" name="month_of_purchase">
+                                <option value="">All</option>
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary" style="margin-top: 30px;">Apply Filter</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <table class="table table-hover table-bordered" id="dev-table">
+            <thead>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Fabric Type</th>
+                    <th>Payment</th>
+                    <th>Price</th>
+                    <th>Color</th>
+                    <th>Product Tag</th>
+                    <th>Set Type</th>
+                    <th>Month of Purchase</th>
+                    <th>Quantity</th>
+                    <th>Count</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            {% for purchase in purchases %}
+            <tr>
+                <td>{{ purchase.id }}</td>
+                <td>{{ purchase.fabric_type }}</td>
+                <td>{{ purchase.payment }}</td>
+                <td>{{ purchase.price }}</td>
+                <td>{{ purchase.color }}</td>
+                <td>{{ purchase.get_product_tag_display }}</td>
+                <td>{{ purchase.setType }}</td>
+                <td>{{ purchase.get_month_of_purchase_display }}</td>
+                <td>{{ purchase.qty }}</td>
+                <td>{{ purchase.count }}</td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <a class="btn btn-primary btn-sm" href="{% url 'fchub:edit-purchase' purchase.id %}">Edit</a>
+                        <a class="btn btn-danger btn-sm" href="{% url 'fchub:delete-purchase' purchase.id %}">Delete</a>
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="11" class="text-center">No Purchases!</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+<!-- Add purchase floating button -->
+<div class="float-button">
+    <a href="{% url 'fchub:add-purchase' %}" class="btn btn-primary btn-float">
+        <i class="fa-solid fa-plus"></i>
+    </a>
+</div>
+
+<style>
+    .float-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .btn-float {
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+        text-align: center;
+        padding: 10px;
+        background: #008000;
+        color: #fff;
+        text-decoration: none;
+        display: inline-block;
+    }
+</style>
+
+{% endblock content %}

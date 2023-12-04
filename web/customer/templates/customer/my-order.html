@@ -1,0 +1,74 @@
+{% extends 'customer/navbar.html' %}
+{% block content %}
+  <div class="container my-5">
+    <div class="row">
+      <div class="col">
+        <hr>
+        {% include 'customer/profile-navbar.html' %}
+        <hr>
+      </div>
+    </div>
+
+    <h1 class="mb-4">My Orders</h1>
+
+    <div class="order-history">
+      <ul class="order-list">
+        {% for order in orders %}
+          <li class="order-item">
+            <div class="order-details">
+              <p class="order-label">Order Number: {{ order.order_number }}</p>
+              <p class="order-label">Order Date: {{ order.order_date }}</p>
+              <p class="order-label">Total Price: ₱{{ order.total_price }}</p>
+              <p class="order-label">Payment Method: {{ order.payment_method }}</p>
+              <p class="order-label">Status: {{ order.status }}</p>
+              <a class="download-button" href="{% url 'customer:generate_invoice' order_id=order.id %}" target="_blank">Download Invoice</a>
+            </div>
+          </li>
+        {% empty %}
+          <p class="no-orders">No orders found for this customer.</p>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <style>
+    .order-list {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .order-item {
+      margin-bottom: 20px;
+      padding: 20px;
+      border: 1px solid #ddd; /* Border color */
+      border-radius: 5px;
+      background-color: #f4f4f4; /* Background color */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .order-details {
+      font-size: 16px;
+      margin: 10px 0;
+    }
+
+    .order-label {
+      font-weight: bold;
+      color: #333; /* Text color */
+    }
+
+    .download-button {
+      background-color: #007BFF; /* Button background color */
+      color: #fff; /* Button text color */
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .no-orders {
+      font-size: 18px;
+      color: #888; /* Text color for the "No orders" message */
+    }
+  </style>
+{% endblock %}

@@ -1,0 +1,341 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Start your development with Meyawo landing page.">
+    <meta name="author" content="Devcrud">
+    <title>{% block title %}Fleeky Curtains{% endblock %}</title>
+    <!-- Tab Icon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'imgs/FC_ICON.ico' %}">
+    <!-- Font icons -->
+    <link rel="stylesheet" href="{% static 'vendors/themify-icons/css/themify-icons.css' %}">
+    <!-- Bootstrap + Steller -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/meyawo1.css' %}">
+    <!-- CSS Bootstrap -->
+</head>
+<body data-spy="scroll" data-target=".navbar" data-offset="40" id="home">
+    <!-- Page Navbar -->
+    <nav class="custom-navbar" data-spy="affix" data-offset-top="20">
+        <div class="container">
+            <a class="logo" href="{% url 'customer:home' %}">Fleeky Curtains</a>
+            <ul class="nav">
+                <li class="item">
+                    <div class="dropdown d-inline-block">
+                        <a class="btn btn-primary rounded" href="{% url 'customer:home' %}">Home</a>
+                    </div>
+                </li>
+                <li class="item">
+                    <div class="dropdown d-inline-block">
+                        <a class="btn btn-primary rounded" href="{% url 'customer:profile' %}">Profile</a>
+                    </div>
+                </li>
+                <li class="item">
+                    <div class="dropdown d-inline-block">
+                        <a class="btn btn-primary rounded" href="">Cart</a>
+                    </div>
+                </li>
+                <li class="item">
+                    <div class="dropdown d-inline-block">
+                        <a class="btn btn-primary rounded" href="{% url 'customer:logout' %}">Log-out</a>
+                    </div>
+                </li>
+            </ul>
+            <a href="javascript:void(0)" id="nav-toggle" class="hamburger hamburger--elastic">
+                <div class="hamburger-box">
+                    <div class="hamburger-inner"></div>
+                </div>
+            </a>
+        </div>
+    </nav><!-- End of Page Navbar -->
+    <!-- Page header -->
+    <div>
+    <header id="home" class="header">
+        <div class="overlay"></div>
+        <div class="header-content container">
+            <h1 class="header-title">
+                <span class="up"></span>
+                <span class="down"></span>
+            </h1>
+            <p class="header-subtitle"></p>
+       </div>
+    </header><!-- End of page header -->
+    </div>
+
+    {% block content %}
+
+    {% endblock %}
+
+    <div class="container bg-color">
+        <br><br><br><br><br><br><br><br>
+    </div>
+    <!-- Footer -->
+    <div class="container">
+        <footer class="footer">
+            <p class="mb-0">Copyright <script>document.write(new Date().getFullYear())</script> &copy; <a href="http://www.devcrud.com">spotLIGHT</a></p>
+            <div class="social-links text-right m-auto ml-sm-auto">
+                <a href="https://www.facebook.com/fleekycurtains.ph" target="_blank" class="link"><i class="ti-facebook"></i></a>
+                <a href="https://www.instagram.com/fleekycurtains/" target="_blank" class="link"><i class="ti-instagram"></i></a>
+                <a href="https://www.tiktok.com/@fleekycurtains?lang=en" target="_blank" class="link"><i class="ti-twitter-alt"></i></a>
+                <a href="javascript:void(0)" target="_blank" class="link"><i class="ti-pinterest-alt"></i></a>
+                <a href="javascript:void(0)" target="_blank" class="link"><i class="ti-rss"></i></a>
+            </div>
+        </footer>
+    </div> <!-- End of page footer -->
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <!-- Core -->
+    <script src="{% static 'vendors/jquery/jquery-3.7.1.js' %}"></script>
+    <script src="{% static 'vendors/bootstrap/bootstrap.bundle.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap 3 affix -->
+    <script src="{% static 'vendors/bootstrap/bootstrap.affix.js' %}"></script>
+    <!-- Meyawo js -->
+    <script src="{% static 'js/meyawo.js' %}"></script>
+    <!-- JS Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+<script>
+    /**
+* __________________________________________________________________
+*
+* Phillipine Address Selector
+* __________________________________________________________________
+*
+* MIT License
+* 
+* Copyright (c) 2020 Wilfred V. Pine
+* 
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+*
+* The above copyright notice and this permission notice shall be included in
+* all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+* THE SOFTWARE.
+*
+* @package Phillipine Address Selector
+* @author Wilfred V. Pine <only.master.red@gmail.com>
+* @copyright Copyright 2020 (https://dev.confired.com)
+* @link https://github.com/redmalmon/philippine-address-selector
+* @license https://opensource.org/licenses/MIT MIT License
+*/
+
+var my_handlers = {
+// fill province
+fill_provinces: function() {
+    //selected region
+    var region_code = $(this).val();
+
+    // set selected text to input
+    var region_text = $(this).find("option:selected").text();
+    let region_input = $('#region-text');
+    region_input.val(region_text);
+    //clear province & city & barangay input
+    $('#province-text').val('');
+    $('#city-text').val('');
+    $('#barangay-text').val('');
+
+    //province
+    let dropdown = $('#province');
+    dropdown.empty();
+    dropdown.append('<option selected="true" disabled>Choose State/Province</option>');
+    dropdown.prop('selectedIndex', 0);
+
+    //city
+    let city = $('#city');
+    city.empty();
+    city.append('<option selected="true" disabled></option>');
+    city.prop('selectedIndex', 0);
+
+    //barangay
+    let barangay = $('#barangay');
+    barangay.empty();
+    barangay.append('<option selected="true" disabled></option>');
+    barangay.prop('selectedIndex', 0);
+
+    // filter & fill
+    
+    var url = "{%static 'json/province.json'%}";
+    $.getJSON(url, function(data) {
+        var result = data.filter(function(value) {
+            return value.region_code == region_code;
+        });
+
+        result.sort(function(a, b) {
+            return a.province_name.localeCompare(b.province_name);
+        });
+
+        $.each(result, function(key, entry) {
+            dropdown.append($('<option></option>').attr('value', entry.province_code).text(entry.province_name));
+        })
+
+    });
+},
+// fill city
+fill_cities: function() {
+    //selected province
+    var province_code = $(this).val();
+
+    // set selected text to input
+    var province_text = $(this).find("option:selected").text();
+    let province_input = $('#province-text');
+    province_input.val(province_text);
+    //clear city & barangay input
+    $('#city-text').val('');
+    $('#barangay-text').val('');
+
+    //city
+    let dropdown = $('#city');
+    dropdown.empty();
+    dropdown.append('<option selected="true" disabled>Choose city/municipality</option>');
+    dropdown.prop('selectedIndex', 0);
+
+    //barangay
+    let barangay = $('#barangay');
+    barangay.empty();
+    barangay.append('<option selected="true" disabled></option>');
+    barangay.prop('selectedIndex', 0);
+
+    // filter & fill
+    
+    var url = "{%static 'json/city.json'%}";
+    $.getJSON(url, function(data) {
+        var result = data.filter(function(value) {
+            return value.province_code == province_code;
+        });
+
+        result.sort(function(a, b) {
+            return a.city_name.localeCompare(b.city_name);
+        });
+
+        $.each(result, function(key, entry) {
+            dropdown.append($('<option></option>').attr('value', entry.city_code).text(entry.city_name));
+        })
+
+    });
+},
+// fill barangay
+fill_barangays: function() {
+    // selected barangay
+    var city_code = $(this).val();
+
+    // set selected text to input
+    var city_text = $(this).find("option:selected").text();
+    let city_input = $('#city-text');
+    city_input.val(city_text);
+    //clear barangay input
+    $('#barangay-text').val('');
+
+    // barangay
+    let dropdown = $('#barangay');
+    dropdown.empty();
+    dropdown.append('<option selected="true" disabled>Choose barangay</option>');
+    dropdown.prop('selectedIndex', 0);
+
+    // filter & Fill
+    
+    var url = "{%static 'json/barangay.json'%}";
+    $.getJSON(url, function(data) {
+        var result = data.filter(function(value) {
+            return value.city_code == city_code;
+        });
+
+        result.sort(function(a, b) {
+            return a.brgy_name.localeCompare(b.brgy_name);
+        });
+
+        $.each(result, function(key, entry) {
+            dropdown.append($('<option></option>').attr('value', entry.brgy_code).text(entry.brgy_name));
+        })
+
+    });
+},
+
+onchange_barangay: function() {
+    // set selected text to input
+    var barangay_text = $(this).find("option:selected").text();
+    let barangay_input = $('#barangay-text');
+    barangay_input.val(barangay_text);
+},
+
+};
+
+
+$(function() {
+// events
+$('#region').on('change', my_handlers.fill_provinces);
+$('#province').on('change', my_handlers.fill_cities);
+$('#city').on('change', my_handlers.fill_barangays);
+$('#barangay').on('change', my_handlers.onchange_barangay);
+
+// load region
+let dropdown = $('#region');
+dropdown.empty();
+dropdown.append('<option selected="true" disabled>Choose Region</option>');
+dropdown.prop('selectedIndex', 0);
+const url = "{%static 'json/region.json'%}";
+// Populate dropdown with list of regions
+$.getJSON(url, function(data) {
+    $.each(data, function(key, entry) {
+        dropdown.append($('<option></option>').attr('value', entry.region_code).text(entry.region_name));
+    })
+});
+});
+  </script>
+<!-- footer -->
+<div class="container">
+    <footer class="footer">       
+        <p class="mb-0">Copyright <script>document.write(new Date().getFullYear())</script> &copy; <a href="http://www.devcrud.com">spotLIGHT</a></p>
+        <div class="social-links text-right m-auto ml-sm-auto">
+            <a href="https://www.facebook.com/fleekycurtains.ph" target="_blank" class="link"><i class="ti-facebook"></i></a>
+            <a href="https://www.instagram.com/fleekycurtains/" target="_blank" class="link"><i class="ti-instagram"></i></a>
+            <a href="https://www.tiktok.com/@fleekycurtains?lang=en" target="_blank" class="link"><i class="ti-twitter-alt"></i></a>
+            <a href="javascript:void(0)" target="_blank" class="link"><i class="ti-pinterest-alt"></i></a>
+            <a href="javascript:void(0)" target="_blank" class="link"><i class="ti-rss"></i></a>
+        </div>
+    </footer>
+</div> <!-- end of page footer -->
+<script>
+    function onSubmit(token) {
+      document.getElementById("form").submit();
+    }
+  </script>
+<!--RECAPTCHA API-->
+<script src="https://www.google.com/recaptcha/api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script>
+
+<!-- core  -->
+
+<script src="{%static '/vendors/bootstrap/bootstrap.bundle.js'%}"></script>
+
+<!-- bootstrap 3 affix -->
+<script src="{%static '/vendors/bootstrap/bootstrap.affix.js'%}"></script>
+
+<!-- Meyawo js -->
+<script src="{% static '/js/meyawo.js'%}"></script>
+
+<!--JS Bootstrap-->
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</body>
+</html>
+ 

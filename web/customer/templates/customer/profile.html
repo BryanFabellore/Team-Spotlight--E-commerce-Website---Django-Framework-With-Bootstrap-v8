@@ -1,0 +1,92 @@
+{% extends 'customer/navbar.html' %}
+{% load static %}
+
+{% block title %}FleekyHub{% endblock %}
+{% block content %}
+    <!-- USER PROFILE -->
+    <section style="background-color: #eee;">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col">
+                    <hr>
+                    {% include 'customer/profile-navbar.html' %}
+                    <hr>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="card mb-4">
+                        <div class="card-body text-center">
+                            <h3 class="text-muted mb-4">{{ request.user }}</h3>
+                            <img src="{{ customer_profile.profile_pic.url }}" alt="profile pic"
+                                 class="img-rounded img-responsive" />
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="card mb-4 mb-lg-0">
+                        <div class="card-body p-0">
+                            <!-- Add content for the second card if needed -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Full Name</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <h3 class="text mb-0">{{ customer_profile.first_name }} {{ customer_profile.last_name }}</h3>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Email</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <h3 class="text mb-0">{{ customer_profile.email }}</h3>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Mobile</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <h3 class="my-auto">{{ customer_profile.phone_number }}</h3>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Full Address</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    {% if customer_addresses %}
+                                        {% for address in customer_addresses %}
+                                            <p class="text-muted mb-0">Street: {{ address.street }}</p>
+                                            <p class="text-muted mb-0">Barangay: {{ address.barangay }}</p>
+                                            <p class="text-muted mb-0">City: {{ address.city }}</p>
+                                            <p class="text-muted mb-0">Province: {{ address.province }}</p>
+                                            <p class="text-muted mb-0">Region: {{ address.region }}</p>
+                                            <p class="text-muted mb-0">Zipcode: {{ address.zipcode }}</p>
+                                            <p class="text-muted mb-0">Detailed Address: {{ address.detailed_address }}</p>
+                                        {% endfor %}
+                                    {% else %}
+                                        <p>No addresses found for this customer.</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- Additional content for the row, if needed -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- END OF USER PROFILE -->
+{% endblock content %}

@@ -1,0 +1,131 @@
+{% include 'navbar/dashboard-side-navbar.html' %}
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div class="container">
+    <h1>Sales Per Color</h1>
+    <!-- Pie Chart Card Container -->
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">Pie Chart: Common Colors</h2>
+            <div class="chart-container" style="height: 400px;">
+                <canvas id="colorPieChart" width="400" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <br><br>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">Bar Graph: Color Sales by Month</h2>
+            <div class="chart-container" style="height: 400px;">
+                <canvas id="colorBarChart" width="400" height="200"></canvas>
+                
+            </div>
+        </div>
+    </div>
+    <div>
+        <br><br>
+    </div>
+    <!-- Sales Table Container -->
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">Sales Table</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Color</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sale in sales %}
+                        <tr>
+                            <td>{{ sale.date }}</td>
+                            <td>{{ sale.color }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Color data for the pie chart
+    var colorCounts = {{ color_counts|safe }};
+    var colorLabels = {{ color_labels|safe }};
+    
+    // Create a pie chart for colors
+    var colorPieCtx = document.getElementById('colorPieChart').getContext('2d');
+    var colorPieChart = new Chart(colorPieCtx, {
+        type: 'pie',
+        data: {
+            labels: colorLabels,
+            datasets: [{
+                data: colorCounts,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(153, 102, 255, 0.7)',
+                    'rgba(255, 159, 64, 0.7)',
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: {
+                display: true,
+                position: 'bottom'
+            },
+            tooltips: {
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        var dataset = data.datasets[0];
+                        var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+                            return previousValue + currentValue;
+                        });
+                        var currentValue = dataset.data[tooltipItem.index];
+                        var percentage = Math.floor(((currentValue / total) * 100) + 0.5);
+                        return colorLabels[tooltipItem.index] + ': ' + percentage + '%';
+                    }
+                }
+            }
+        }
+    });
+
+    // Create a bar graph
+    var barCtx = document.getElementById('colorBarChart').getContext('2d');
+    var colorBarData = {{ color_bar_data|safe }};
+    
+    var categoryBarChart = new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: colorBarData.months,
+            datasets: Object.keys(colorBarData.sales_data).map(function(color, index) {
+                return {
+                    label: color,
+                    data: colorBarData.sales_data[color],
+                    backgroundColor: ['rgba(255, 99, 132, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(153, 102, 255, 0.7)',
+                    'rgba(255, 159, 64, 0.7)'][index % 6],
+                };
+            })
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+        }
+    });
+</script>
+
+
+{% endblock %}

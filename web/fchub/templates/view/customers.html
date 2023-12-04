@@ -1,0 +1,51 @@
+{% extends 'navbar/dashboard-navbar.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h6 class="panel-title">Total Customers</h6>
+    </div>
+    <table class="table table-hover table-bordered" id="dev-table">
+      <thead>
+        <tr>
+          <th>Customer ID</th>
+          <th>Name</th>
+          <th>Picture</th>
+          <th>Contact</th>
+          <th>Email</th>
+          <th>Addresses</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in customers %}
+        <tr>
+          <td>{{ c.custom_id }}</td>
+          <td>{{ c.first_name }} {{ c.last_name }}</td>
+          <td><img src="{{ c.profile_pic.url }}" alt="Profile Pic" height="40px" width="40px" /></td>
+          <td>{{ c.phone_number }}</td>
+          <td>{{ c.email }}</td>
+          <td>
+            {% for address in c.address_customers.all %}
+              <div class="address">
+                <strong>Detailed Address:</strong> {{ address.detailed_address }}<br>
+                <strong>Street:</strong> {{ address.street }}<br>
+                <strong>Barangay:</strong> {{ address.barangay }}<br>
+                <strong>City:</strong> {{ address.city }}<br>
+                <strong>Province:</strong> {{ address.province }}<br>
+                <strong>Region:</strong> {{ address.region }}<br>
+                <strong>Zipcode:</strong> {{ address.zipcode }}
+              </div>
+            {% empty %}
+              No Addresses Available
+            {% endfor %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock content %}

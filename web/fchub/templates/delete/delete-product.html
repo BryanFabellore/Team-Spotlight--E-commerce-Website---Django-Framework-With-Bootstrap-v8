@@ -1,0 +1,28 @@
+{% extends 'navbar/dashboard-navbar.html' %}
+{% block content %}
+<div class="container">
+    <div class="panel panel-danger">
+        <div class="panel-heading text-center">
+            <h2 class="text-dark">Confirm Deletion</h2>
+        </div>
+        <div class="panel-body">
+            <h3>Are you sure you want to delete this product?</h3>
+
+            <p><strong>Product ID:</strong> {{ product.custom_id }}</p>
+            <p><strong>Name:</strong> {{ product.name }}</p>
+            <p><strong>Image:</strong> <img src="{{ product.product_image.url }}" alt="Product" class="img-thumbnail" width="100" /></p>
+            <p><strong>Price:</strong> {{ product.price }}</p>
+            <p><strong>Fabric:</strong> {{ product.category.fabric }}</p>
+            <p><strong>Set Type:</strong> {{ product.category.setType }}</p>
+            <p><strong>Color:</strong> {{ product.color }}</p>
+            <p><strong>Description:</strong> {{ product.description }}</p>
+
+            <form method="post" action="{% url 'fchub:delete-product' product.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                <a class="btn btn-secondary" href="{% url 'fchub:products' %}">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

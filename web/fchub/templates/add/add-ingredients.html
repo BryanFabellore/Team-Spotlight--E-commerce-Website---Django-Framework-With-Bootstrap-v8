@@ -1,0 +1,118 @@
+{% extends 'navbar/dashboard-navbar.html' %}
+{% block content %}
+<head>
+    <title>Add Curtain Ingredients</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Your custom CSS styles */
+        .ingredient-card {
+            margin-bottom: 20px;
+        }
+        .ingredient-card .card-body {
+            padding: 15px;
+        }
+        .ingredient-card .form-group {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>Add Curtain Ingredients</h2>
+        <form method="post">
+            {% csrf_token %}
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                <strong>Error!</strong> Please correct the errors below.
+                <ul>
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card ingredient-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Fabric Materials</h5>
+                            <div class="form-group">
+                                <label for="id_fabric_name">Fabric Name:</label>
+                                {{ form.name }}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_fabric">Fabric Material:</label>
+                                {{ form.fabric }}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_fabric_count">Fabric Count:</label>
+                                {{ form.fabric_count }}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_fabric_unit">Fabric Unit:</label>
+                                {{ form.fabric_unit }}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_fabric_length">Fabric Length:</label>
+                                {{ form.length }}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_fabric_length_unit">Fabric Length Unit:</label>
+                                {{ form.length_unit }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card ingredient-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Rings</h5>
+                            <div class="form-group">
+                                <label for="id_rings_count">Rings Count:</label>
+                                {{ form.rings_count }}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_rings_unit">Rings Unit:</label>
+                                {{ form.rings_unit }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card ingredient-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Grommets</h5>
+                            <div class="form-group">
+                                <label for="id_grommet_count">Grommet Count:</label>
+                                {{ form.grommet_count }}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_grommet_unit">Grommet Unit:</label>
+                                {{ form.grommet_unit }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card ingredient-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Thread</h5>
+                            <div class="form-group">
+                                <label for="id_thread_count">Thread Count:</label>
+                                {{ form.thread_count }}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_thread_unit">Thread Unit:</label>
+                                {{ form.thread_unit }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Add Ingredient</button>
+        </form>
+    </div>
+</body>
+{% endblock %}

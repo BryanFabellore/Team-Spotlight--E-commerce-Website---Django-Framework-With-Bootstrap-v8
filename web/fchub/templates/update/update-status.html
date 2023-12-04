@@ -1,0 +1,286 @@
+{% extends 'navbar/dashboard-navbar.html' %}
+
+{% block content %}
+<style>
+    .change-status-container {
+        background-color: #f5f5f5;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 60%;
+        margin: 20px auto;
+    }
+
+    .change-status-container h1 {
+        font-size: 28px;
+        margin-bottom: 20px;
+        color: #333;
+        text-align: center;
+    }
+
+    .order-info {
+        font-size: 16px;
+        margin-bottom: 10px;
+        color: #555;
+    }
+
+    .status-label {
+        font-weight: bold;
+        color: #212529;
+    }
+
+    .select-status {
+        font-size: 16px;
+        margin-bottom: 10px;
+        color: #555;
+    }
+
+    .status-description {
+        font-size: 16px;
+        color: #333;
+    }
+
+    .submit-button {
+        background-color: #007BFF;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 16px;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 20px;
+        cursor: pointer;
+    }
+
+    .back-button {
+        background-color: #ccc;
+        color: #6f42c1;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 16px;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 20px;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+
+    .card-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin: 20px auto;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #f5f5f5;
+        width: 100%;
+        max-width: 800px; /* Adjust as needed */
+    }
+
+    .card {
+        flex: 1 1 300px; /* Adjust width as needed */
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    }
+    .main-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin: 20px auto;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #f5f5f5;
+        width: 100%;
+        max-width: 800px; /* Adjust as needed */
+    }
+
+    .card {
+        flex: 1 1 45%; /* Adjust width as needed */
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .right-card {
+        margin-top: 20px; /* Adjust margin between columns */
+    }
+</style>
+
+
+<div class="main-container">
+    <!-- Change Order Status Card -->
+    <div class="card">
+        <h1>Change Order Status</h1>
+        <p class="order-info"><span class="status-label">Order ID:</span> {{ order.id }}</p>
+        <p class="order-info"><span class="status-label">Current Status:</span> {{ order.get_status_display }}</p>
+
+        {% if order.status == 'Delivered' %}
+            <p class="status-description">This order has already been marked as delivered.</p>
+            {% if error_message %}
+    <p>{{ error_message }}</p>
+{% endif %}
+        {% else %}
+        <form method="post">
+            {% csrf_token %}
+            <label for="new_status" class="select-status">Select New Status:</label>
+            <select name="new_status" id="new_status">
+                {% for choice in order.STATUS_CHOICES %}
+                    {% if choice.0 in allowed_choices %}
+                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                    {% else %}
+                        <option value="{{ choice.0 }}" disabled>{{ choice.1 }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <br>
+            <input type="submit" value="Change Status" class="submit-button">
+        </form>
+        
+        {% endif %}
+
+        <!-- Display product on hand and materials for creating/sewing -->
+        <p class="status-description">
+            {% if product_on_hand_message %}
+                {{ product_on_hand_message }}
+            {% endif %}
+        </p>
+        <p class="status-description">
+            {% if create_sew_message %}
+                {{ create_sew_message }}
+            {% endif %}
+        </p>
+
+        <!-- Existing status descriptions based on order status -->
+        <p class="status-description">
+            {% if order.status == 'Pending' %}
+                This order is pending and waiting for processing.
+            {% elif order.status == 'Order Confirmed' %}
+                This order is confirmed and ready for processing.
+            {% elif order.status == 'Out for Delivery' %}
+                This order is out for delivery to the customer.
+            {% elif order.status == 'Delivered' %}
+                This order has been successfully delivered to the customer.
+            {% else %}
+                Unknown status.
+            {% endif %}
+        </p>
+
+        <a href="{% url 'fchub:orders' %}" class="back-button">Back to Orders</a>
+    </div>
+
+    <!-- On Hand Stock Product Container -->
+    <div class="card">
+        <h2>On Hand Stock Products</h2>
+        {% if ordered_fabrics %}
+            <ul>
+                {% for fabric in ordered_fabrics %}
+                    <li>
+                        {{ fabric.product.name }} - Quantity: {{ fabric.inventory_quantity }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No fabric materials found in the inventory for this order.</p>
+        {% endif %}
+    </div>
+    <!-- Available Materials Container -->
+   <!-- Materials & Fabric Materials Container -->
+   <div class="card-container">
+    <!-- Left Card Container - Components -->
+    
+    <div class="card">
+        <div class="components-table">
+            <h3>Components</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Fabric</th>
+                        <th>Grommet</th>
+                        <th>Rings</th>
+                        <th>Thread</th>
+                        <th>Color</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for combination in combinations_data %}
+                        <tr>
+                            <td>{{ combination.Product }}</td>
+                            <td>{{ combination.Fabric }}</td>
+                            <td>{{ combination.Grommet }}</td>
+                            <td>{{ combination.Rings }}</td>
+                            <td>{{ combination.Thread }}</td>
+                            <td>
+                                Fabric: {% if combination.fabrics_colors %}
+                                {% for color in combination.fabrics_colors %}
+                                    {{ color }}{% if not forloop.last %}, {% endif %}
+                                {% endfor %}
+                                {% else %}
+                                    No Fabric Color
+                                {% endif %}
+                                - Material: {{ combination.ThreadColor }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="card-container">
+        <!-- Right Card Container - Available Materials -->
+        <div class="card">
+            <div class="components-table">
+                <h2>Required Materials</h2>
+                <div class="availability-details">
+                    <p>Required Fabric Count: {{ req_fabric_count }}</p>
+                    <p>Required Grommet Count: {{ req_grommet_count }}</p>
+                    <p>Required Rings Count: {{ req_rings_count }}</p>
+                    <p>Required Thread Count: {{ req_thread_count }}</p>
+                    <!-- Add other required counts here -->
+                    <p>Length Required: {{ total_length_required }} ft</p>
+                    <div class="card">
+                        <p>Total Quantity that can be Accumulated: {{ total_possible_qty_combined }}</p>
+
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function checkStock(event) {
+            var orderedQuantity = /* Extract the ordered quantity */;
+            var availableQuantity = /* Extract the available quantity */;
+    
+            // Check if ordered quantity exceeds available stock
+            if (orderedQuantity > availableQuantity) {
+                event.preventDefault(); // Prevent form submission
+                alert("Sorry, the ordered quantity exceeds the available stock. Please modify the quantity.");
+            }
+        }
+    </script>
+
+
+
+
+
+
+
+
+{% endblock %}

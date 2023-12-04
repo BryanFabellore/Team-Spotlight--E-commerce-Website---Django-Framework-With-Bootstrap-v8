@@ -1,0 +1,93 @@
+{% extends "navbar/dashboard-navbar.html" %}
+
+{% block content %}
+<style>
+  /* CSS styles */
+  .add-category-container {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 80%;
+    margin: 20px auto;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+  }
+
+  .form-input:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+
+  .btn-primary {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+
+  .btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .btn-secondary:hover {
+    background-color: #5a6268;
+  }
+
+  .error-message {
+    color: #ff0000;
+  }
+</style>
+
+<div class="add-category-container">
+  <h2>Add Category</h2>
+  <form method="post" class="simple-form">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="{{ form.fabric.id_for_label }}" class="form-label">Fabric:</label>
+      {{ form.fabric }}
+      <span class="error-message">{{ form.fabric.errors }}</span>
+    </div>
+    <div class="form-group">
+      <label for="{{ form.setType.id_for_label }}" class="form-label">Set Type:</label>
+      {{ form.setType }}
+      <span class="error-message">{{ form.setType.errors }}</span>
+    </div>
+    <div class="form-group">
+      <label for="{{ form.description.id_for_label }}" class="form-label">Description:</label>
+      {{ form.description }}
+      <span class="error-message">{{ form.description.errors }}</span>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Category</button>
+    <a href="{% url 'fchub:category' %}" class="btn btn-secondary">Back</a>
+  </form>
+</div>
+{% endblock %}

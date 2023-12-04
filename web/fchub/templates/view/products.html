@@ -1,0 +1,95 @@
+{% extends 'navbar/dashboard-navbar.html' %}
+{% load static %}
+{% block content %}
+<head></head>
+
+<div class="container">
+    <div class="panel panel-primary">
+        <div class="panel-heading text-center">
+            <h2 class="text-dark">Total Products</h2>
+        </div>
+        <div class="filter-form">
+            <form method="get">
+                <div class="form-group">
+                    <label for="sort">Sort by Price:</label>
+                    <select class="form-control" id="sort" name="sort">
+                        <option value="low_to_high">Low to High</option>
+                        <option value="high_to_low">High to Low</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Apply Filter</button>
+            </form>
+        </div>
+        <table class="table table-hover table-bordered" id="dev-table">
+            <thead>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Stock</th> 
+                    <th>Name</th>
+                    <th>Image</th>
+                    <th>Price</th>
+                    <th>Fabric</th>
+                    <th>Set Type</th>
+                    <th>Color</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.custom_id }}</td>
+                <td>{{ product.stock }}</td>
+                <td>{{ product.name }}</td>
+                <td>
+                    <img src="{{ product.product_image.url }}" alt="Product" class="img-thumbnail" width="100" />
+                </td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.category.fabric }}</td>
+                <td>{{ product.category.setType }}</td>
+                <td>{{ product.color }}</td>
+                <td>{{ product.description }}</td>
+                <td>
+                    <div class="btn-group" role="group">
+                        <a class="btn btn-primary btn-sm" href="{% url 'fchub:edit-product' product.id %}">Edit</a>
+                        <a class="btn btn-danger btn-sm" href="{% url 'fchub:delete-product' product.id %}">Delete</a>
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8" class="text-center">No Products!</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+<!-- add product floating button -->
+<div class="float-button">
+    <a href="{% url 'fchub:add-products' %}" class="btn btn-primary btn-float">
+        <i class="fa-solid fa-plus"></i>
+    </a>
+</div>
+
+<style>
+    .float-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .btn-float {
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+        text-align: center;
+        padding: 10px;
+        background: #008000;
+        color: #fff;
+        text-decoration: none;
+        display: inline-block;
+    }
+</style>
+
+{% endblock content %}

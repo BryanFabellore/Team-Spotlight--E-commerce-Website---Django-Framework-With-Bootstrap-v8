@@ -1,0 +1,115 @@
+{% include 'navbar/dashboard-side-navbar.html' %}
+{% block content %}
+<style>
+    .scrollable-table {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    .card-section {
+        margin-bottom: 20px;
+        border: 1px solid #e6e6e6;
+        border-radius: 5px;
+    }
+    .table-container {
+        padding: 20px;
+    }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<br><br>
+<div class="container">
+    <div class="card card-section">
+        <div class="card-header">
+            <h2>Actions</h2>
+            {% if message %}
+                <div class="alert alert-info">
+                    {{ message }}
+                </div>
+            {% endif %}
+            <div class="button-container">
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="button">Train Model</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="card card-section">
+        <div class="card-header">
+            <h2>Trained Model</h2>
+        </div>
+        <div class="card-body">
+            <div class="scrollable-table">
+                <table class="table table-bordered">
+                    <h2>Winners</h2>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Location</th>
+                            <th>Fabric</th>
+                            <th>Set Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in winners_dataset %}
+                            <tr>
+                                <td>{{ product.date }}</td>
+                                <td>{{ product.location }}</td>
+                                <td>{{ product.fabric }}</td>
+                                <td>{{ product.setType }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card card-section">
+        <div class="card-header">
+            <h2>Training Reports</h2>
+        </div>
+        <div class="card-body">
+            <p>Linear Regression Accuracy: {{ linear_regression_accuracy }}</p>
+            <p>Decision Tree Accuracy: {{ decision_tree_accuracy }}</p>
+        </div>
+    </div>
+
+    <div class="card card-section">
+        <div class="card-header">
+            <h2>Raw Data</h2>
+            <p>Legend:</p>
+            <ul>
+                <li>Date: The date of the transaction.</li>
+                <li>Location: The location of the transaction.</li>
+                <li>Fabric: The fabric type of the product.</li>
+                <li>Set Type: The set type of the product.</li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="scrollable-table">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Location</th>
+                            <th>Fabric</th>
+                            <th>Set Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in raw_data %}
+                            <tr>
+                                <td>{{ item.date }}</td>
+                                <td>{{ item.location }}</td>
+                                <td>{{ item.fabric }}</td>
+                                <td>{{ item.setType }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

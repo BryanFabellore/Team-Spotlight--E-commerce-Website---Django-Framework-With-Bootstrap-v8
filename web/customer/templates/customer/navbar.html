@@ -1,0 +1,103 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Start your development with Meyawo landing page.">
+    <meta name="author" content="Devcrud">
+    <title>{% block title %}Fleeky Curtains{% endblock %}</title>
+    <!-- Tab Icon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'imgs/FC_ICON.ico' %}">
+    <!-- Font icons -->
+    <link rel="stylesheet" href="{% static 'vendors/themify-icons/css/themify-icons.css' %}">
+    <!-- Bootstrap + Steller -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/meyawo1.css' %}">
+    <!-- CSS Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'vendors/jquery/jquery-3.7.1.js' %}"></script>
+
+
+</head>
+<body data-spy="scroll" data-target=".navbar" data-offset="40" id="home">
+    <!-- Page Navbar -->
+    <nav class="custom-navbar" data-spy="affix" data-offset-top="20">
+        <div class="container">
+            <a class="logo" href="{% url 'customer:home' %}">Fleeky Curtains</a>
+            <ul class="nav">
+                <li class="item">
+                    <div class="dropdown d-inline-block">
+                        <a class="btn btn-primary rounded" href="{% url 'customer:home' %}">Home</a>
+                    </div>
+                </li>
+                <li class="item">
+                    <div class="dropdown d-inline-block">
+                        <a class="btn btn-primary rounded" href="{% url 'customer:profile' %}">Profile</a>
+                    </div>
+                </li>
+                <li class="item">
+                    <div class="dropdown d-inline-block">
+                        <a class="btn btn-primary rounded" href="{% url 'customer:cart' %}">Cart</a>
+                    </div>
+                </li>
+                <li class="item">
+                    <div class="dropdown d-inline-block">
+                        <a class="btn btn-primary rounded" href="{% url 'customer:logout' %}">Log-out</a>
+                    </div>
+                </li>
+            </ul>
+            <a href="javascript:void(0)" id="nav-toggle" class="hamburger hamburger--elastic">
+                <div class="hamburger-box">
+                    <div class="hamburger-inner"></div>
+                </div>
+            </a>
+        </div>
+    </nav><!-- End of Page Navbar -->
+    <!-- Page header -->
+    <div>
+    <header id="home" class="header">
+        <div class="overlay"></div>
+        <div class="header-content container">
+            <h1 class="header-title">
+                <span class="up"></span>
+                <span class="down"></span>
+            </h1>
+            <p class="header-subtitle"></p>
+       </div>
+    </header><!-- End of page header -->
+    </div>
+
+    {% block content %}
+
+    {% endblock %}
+
+    <div class="container bg-color">
+        <br><br><br><br><br><br><br><br>
+    </div>
+    <!-- Footer -->
+    <div class="container">
+        <footer class="footer">
+            <p class="mb-0">Copyright <script>document.write(new Date().getFullYear())</script> &copy; <a href="http://www.devcrud.com">spotLIGHT</a></p>
+            <div class="social-links text-right m-auto ml-sm-auto">
+                <a href="https://www.facebook.com/fleekycurtains.ph" target="_blank" class="link"><i class="ti-facebook"></i></a>
+                <a href="https://www.instagram.com/fleekycurtains/" target="_blank" class="link"><i class="ti-instagram"></i></a>
+                <a href="https://www.tiktok.com/@fleekycurtains?lang=en" target="_blank" class="link"><i class="ti-twitter-alt"></i></a>
+                <a href="javascript:void(0)" target="_blank" class="link"><i class="ti-pinterest-alt"></i></a>
+                <a href="javascript:void(0)" target="_blank" class="link"><i class="ti-rss"></i></a>
+            </div>
+        </footer>
+    </div> <!-- End of page footer -->
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <!-- Core -->
+    <script src="{% static 'vendors/jquery/jquery-3.7.1.js' %}"></script>
+    <script src="{% static 'vendors/bootstrap/bootstrap.bundle.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap 3 affix -->
+    <script src="{% static 'vendors/bootstrap/bootstrap.affix.js' %}"></script>
+    <!-- Meyawo js -->
+    <script src="{% static 'js/meyawo.js' %}"></script>
+    <!-- JS Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+</body>
+</html>

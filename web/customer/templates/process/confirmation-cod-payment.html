@@ -1,0 +1,59 @@
+{% extends 'customer/navbar.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container">
+    <h2>Order Confirmation</h2>
+    <hr>
+
+    <div class="row">
+      <div class="col-md-6">
+        <h3>Order Details</h3>
+        <p><strong>VAT (12%):</strong> PHP {{ vat }}</p>
+        <p><strong>Total Price (with VAT):</strong> PHP {{ with_vat }}</p>
+        <p><strong>Shipping Fee:</strong> PHP {{ shipping_fee }}</p>
+        <p><strong>Total Price:</strong> PHP {{ total_price }}</p>
+
+        <h3>Customer Information</h3>
+        <p><strong>Customer Name:</strong> {{ customer.first_name }} {{ customer.last_name }}</p>
+        <p><strong>Email:</strong> {{ customer.email }}</p>
+        <p><strong>Shipping Address:</strong> {{ customer_address }}</p>
+
+        <h3>Payment Method</h3>
+        <p>Cash on Delivery (COD)</p>
+      </div>
+
+      <div class="col-md-6">
+        <h3>Order Items</h3>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Item Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in cart_items.all %}
+              <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>PHP {{ item.item_total }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <table>
+          <tbody>
+            <td><strong>Total:</strong> PHP {{ total }}</td>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <div class="text-center">
+      <a href="{% url 'customer:proceed-purchase' %}" class="btn btn-primary">Back</a>
+      <a href="{% url 'customer:success-cod-payment' %}" class="btn btn-primary">Confirm Order</a>
+    </div>
+  </div>
+{% endblock %}

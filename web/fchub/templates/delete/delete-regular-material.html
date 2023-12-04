@@ -1,0 +1,29 @@
+{% extends 'navbar/dashboard-navbar.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="panel panel-danger">
+        <div class="panel-heading text-center">
+            <h2 class="text-dark">Confirm Deletion</h2>
+        </div>
+        <div class="panel-body">
+            <p>Are you sure you want to delete the following material?</p>
+            <p><strong>Material ID:</strong> {{ material.Custom_material_id}}</p>
+            <p><strong>Type:</strong> {{ material.type}}</p>
+            <p><strong>Name:</strong> {{ material.name }}</p>
+            <p><strong>Unit:</strong> {{ material.unit }}</p>
+            <p><strong>Count:</strong> {{ material.count }}</p>
+            <p><strong>Quantity:</strong> {{ material.qty }}</p>
+            <p><strong>Description:</strong> {{ material.description }}</p>
+
+            <form method="post" action="{% url 'fchub:delete-regular-material' material.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete</button>
+                <a class="btn btn-secondary" href="{% url 'fchub:materials' %}">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

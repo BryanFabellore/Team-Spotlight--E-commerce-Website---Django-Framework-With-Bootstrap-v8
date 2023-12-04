@@ -1,0 +1,239 @@
+{% include 'navbar/dashboard-side-navbar.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        #map {
+            height: 50vh;
+            width: 100%;
+        }
+
+        .map-container {
+            background-color: #f8f9fa;
+            border: 1px solid #d1d1d1;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .table-container {
+            background-color: #f8f9fa;
+            border: 1px solid #d1d1d1;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 20px;
+            height: 50vh;
+            overflow-y: scroll;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+    </style>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Sales Geographical Section -->
+        <div class="section">
+            <h2 class="section-title">Sales Geographical</h2>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="map-container">
+                        <div id="map"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sales per Locations Section -->
+        <div class="section">
+            <h2 class="section-title">Sales per Locations</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card chart-card">
+                        <div class="card-body">
+                            <canvas id="barChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card legend-card">
+                        <div class="card-body">
+                            <div id="chart-legend"></div> <!-- Legend container -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Sales Table Section -->
+        <div class="section">
+            <h2 class="section-title">Sales Table</h2>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card table-card">
+                        <div class="card-body">
+                            <table id="salesTable" class="display">
+                                <thead>
+                                    <tr>
+                                        <th>Location</th>
+                                        <th>Fabric</th>
+                                        <th>Date</th>
+                                        <th>Set Type</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for sale in sales_data %}
+                                    <tr>
+                                        <td>{{ sale.location }}</td>
+                                        <td>{{ sale.fabric }}</td>
+                                        <td>{{ sale.dates }}</td>
+                                        <td>{{ sale.set_type }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script>
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+    
+        $(document).ready(function() {
+            $('#salesTable').DataTable({
+                "pageLength": 10,
+                "order": [],
+            });
+        });
+    
+        var map = L.map('map').setView([12.8797, 121.7740], 6);
+    
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+    
+        var salesData = {{ sales_data|safe }};
+        var locationColors = {}; // Store location colors
+    
+        salesData.forEach(function(data) {
+            // Generate a random color for each location if not already generated
+            if (!locationColors[data.location]) {
+                locationColors[data.location] = getRandomColor();
+            }
+    
+            // Use Font Awesome icons with color style
+            var icon = L.divIcon({
+                className: 'leaflet-div-icon',
+                html: `<i class="fa fa-fw fa-2x fa-map-marker" style="color: ${locationColors[data.location]}"></i>`,
+            });
+    
+            L.marker([data.latitude, data.longitude], { icon: icon }).addTo(map).bindPopup(data.location);
+        });
+    
+        var locations = {{ locations|safe }};
+        var locationCounts = {{ location_counts|safe }};  // Get the location counts as a dictionary
+    
+        // Create a map to store labels and their corresponding counts
+        var labelsMap = new Map();
+    
+        locations.forEach(function(location) {
+            var count = locationCounts[location] || 0;
+    
+            if (count > 1) {
+                labelsMap.set(location, count);
+            } else if (!labelsMap.has(location)) {
+                labelsMap.set(location, 1);
+            }
+        });
+    
+        // Create an array of labels with counts and colors for icons
+        var labels = [];
+    
+        labelsMap.forEach(function(count, label) {
+            labels.push(count > 1 ? `${label} (${count}x)` : label);
+        });
+    
+        var dataCounts = labels.map(function (label) {
+            return parseInt(label.match(/\d+/)) || 1;
+        });
+    
+        var data = {
+            labels: labels,
+            datasets: [{
+                label: 'Total Sales',
+                data: dataCounts,
+                backgroundColor: labels.map(function(label) {
+                    return locationColors[label.replace(/\s*\(\d+x\)$/, '')];
+                }),
+                borderWidth: 1,
+            }],
+        };
+    
+        var options = {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                },
+            },
+            plugins: {
+                legend: {
+                    display: false, // Hide the default legend
+                },
+            }
+        };
+        
+    
+        var ctx = document.getElementById('barChart').getContext('2d');
+    
+        var myBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: options,
+        });
+    
+        // Custom legend with Font Awesome icons and colors
+        var legendContainer = document.getElementById('chart-legend');
+        labelsMap.forEach(function (count, label, index) {
+            var legendItem = document.createElement('div');
+            legendItem.innerHTML = `
+                <i class="fas fa-map-marker-alt" style="color: ${locationColors[label]}"></i>
+                <span style="margin-left: 5px;">${label}</span>
+            `;
+            legendContainer.appendChild(legendItem);
+        });
+    </script>
+    
+</body>
+</html>
+{% endblock %}

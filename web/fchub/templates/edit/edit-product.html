@@ -1,0 +1,50 @@
+{% extends 'navbar/dashboard-navbar.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h1 class="text-center text-dark">UPDATE PRODUCT</h1>
+    
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="{{ form.name.id_for_label }}">Product Name</label>
+            {{ form.name|add_class:"form-control" }}
+          </div>
+          <div class="form-group">
+            <label for="{{ form.color.id_for_label }}">Color</label>
+            {{ form.color|add_class:"form-control" }}
+          </div>
+          <div class="form-group">
+            <label for="{{ form.price.id_for_label }}">Price (₱)</label>
+            {{ form.price|add_class:"form-control" }}
+          </div>
+          <div class="form-group">
+            <label for="{{ form.stock.id_for_label }}">Quantity</label>
+            {{ form.stock|add_class:"form-control" }}
+          </div>
+          <div class="form-group">
+            <label for="{{ form.category.id_for_label }}">Category</label>
+            {{ form.category|add_class:"form-control" }}
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="{{ form.description.id_for_label }}">Description</label>
+            {{ form.description|add_class:"form-control" }}
+          </div>
+          <div class="form-group">
+            <label for="{{ form.product_image.id_for_label }}">Image</label>
+            {{ form.product_image|add_class:"form-control" }}
+          </div>
+        </div>
+      </div>
+      
+      <div class="d-grid gap-2 col-6 mx-auto mt-3">
+        <button type="submit" class="btn btn-dark btn-lg text-light">UPDATE</button>
+      </div>
+    </form>
+  </div>
+{% endblock content %}

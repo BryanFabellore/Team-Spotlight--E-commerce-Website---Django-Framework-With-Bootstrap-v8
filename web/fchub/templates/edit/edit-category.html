@@ -1,0 +1,76 @@
+{% extends "navbar/dashboard-navbar.html" %}
+
+{% block content %}
+  <div class="container mt-4">
+    <h2>Edit Category</h2>
+    <form method="post" class="edit-category-form">
+      {% csrf_token %}
+      <div class="form-group">
+        {{ form.fabric.label_tag }}
+        {{ form.fabric }}
+      </div>
+      <div class="form-group">
+        {{ form.setType.label_tag }}
+        {{ form.setType }}
+      </div>
+      <div class="form-group">
+        {{ form.description.label_tag }}
+        {{ form.description }}
+      </div>
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+      <a href="{% url 'fchub:category' %}" class="btn btn-secondary">Back</a>
+    </form>
+  </div>
+
+  <style>
+    /* CSS styles */
+
+    .edit-category-form {
+      background-color: #fff;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+
+    .btn-secondary {
+      background-color: #6c757d;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn-secondary:hover {
+      background-color: #5a6268;
+    }
+  </style>
+{% endblock %}

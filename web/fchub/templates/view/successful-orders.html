@@ -1,0 +1,49 @@
+{% extends 'navbar/dashboard-navbar.html' %}
+
+{% block title %}Successful Orders{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Successful Orders</h2>
+    <a href="{% url 'fchub:orders' %}" class="btn btn-secondary">Back to Dashboard</a>
+    <a href="{% url 'fchub:download-successful-orders-csv' %}" class="btn btn-primary">
+        Download CSV
+    </a>
+    <table class="table table-hover table-bordered" id="successful-order-table">
+        <thead>
+            <tr>
+                <th>Success Order ID</th>
+                <th>Order Number</th>
+                <th>Date</th>
+                <th>Location</th>
+                <th>Name</th>
+                <th>Fabric</th>
+                <th>Set Type</th>
+                <th>Color</th>
+                <th>Quantity</th>
+                <th>Count</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in successful_orders %}
+                <tr>
+                    <td>{{ order.success_order_id }}</td>
+                    <td>{{ order.order_number }}</td>
+                    <td>{{ order.date }}</td>
+                    <td>{{ order.location }}</td>
+                    <td>{{ order.name }}</td>
+                    <td>{{ order.fabric }}</td>
+                    <td>{{ order.setType }}</td>
+                    <td>{{ order.color }}</td>
+                    <td>{{ order.qty }}</td>
+                    <td>{{ order.count }}</td>
+                    <td>₱{{ order.price }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    
+</div>
+{% endblock %}

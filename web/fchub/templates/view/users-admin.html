@@ -1,0 +1,38 @@
+{% include 'navbar/dashboard-side-navbar.html' %}
+
+{% block content %}
+  <div class="container">
+    <h1 class="mt-5">List of Administrators</h1>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Login Time</th>
+          <th>Logout Time</th>
+          <th>Action</th>  <!-- Add a new column for the "Delete" button -->
+        </tr>
+      </thead>
+      <tbody>
+        {% for admin in admins %}
+          <tr>
+            <td>{{ admin.first_name }}</td>
+            <td>{{ admin.last_name }}</td>
+            <td>{{ admin.login_time|default:"Not available" }}</td>
+            <td>{{ admin.logout_time|default:"Not available" }}</td>
+            <td>
+              <form method="post" action="{% url 'fchub:delete-admin' admin.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+              </form>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="5">No administrators found.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

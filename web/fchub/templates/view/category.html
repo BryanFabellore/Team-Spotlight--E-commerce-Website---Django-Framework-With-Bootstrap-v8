@@ -1,0 +1,136 @@
+{% extends "navbar/dashboard-navbar.html" %}
+{% block content %}
+  <div class="container mt-4">
+    <h2>Category List</h2>
+
+    <!-- Filter Inputs -->
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <select class="form-control" id="fabricFilter">
+          <option value="">Filter Fabric</option>
+          {% for fabric, _ in fabric_choices %}
+            <option value="{{ fabric }}">{{ fabric }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-4">
+        <select class="form-control" id="setTypeFilter">
+          <option value="">Filter Set Type</option>
+          {% for set_type, _ in set_type_choices %}
+            <option value="{{ set_type }}">{{ set_type }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-4">
+        <input type="text" class="form-control" id="descriptionFilter" placeholder="Filter Description">
+      </div>
+    </div>
+
+    <!-- Reset Filter Button -->
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <button class="btn btn-secondary" id="resetFilter">Reset Filter</button>
+      </div>
+    </div>
+
+    <!-- Category Table -->
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Fabric</th>
+          <th>Set Type</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for category in categories %}
+          <tr>
+            <td>{{ category.get_fabric_display }}</td>
+            <td>{{ category.get_setType_display }}</td>
+            <td>{{ category.description }}</td>
+            <td>
+              <a href="{% url 'fchub:edit-category' category.id %}">Edit</a>
+              <a href="{% url 'fchub:delete-category' category.id %}">Delete</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    
+    <!-- Floating Add Button -->
+    <div class="float-button">
+      <a href="{% url 'fchub:add-category' %}" class="btn-float">+</a>
+    </div>
+  </div>
+
+  <style>
+    .float-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .btn-float {
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+        text-align: center;
+        padding: 10px;
+        background: #008000;
+        color: #fff;
+        text-decoration: none;
+        display: inline-block;
+    }
+  </style>
+
+  <script>
+    // JavaScript for filtering the table and resetting the filter
+    document.addEventListener("DOMContentLoaded", function () {
+      const fabricFilter = document.getElementById("fabricFilter");
+      const setTypeFilter = document.getElementById("setTypeFilter");
+      const descriptionFilter = document.getElementById("descriptionFilter");
+      const resetFilterButton = document.getElementById("resetFilter");
+
+      [fabricFilter, setTypeFilter, descriptionFilter].forEach((filter) => {
+        filter.addEventListener("input", () => {
+          filterTable();
+        });
+      });
+
+      resetFilterButton.addEventListener("click", () => {
+        fabricFilter.value = "";
+        setTypeFilter.value = "";
+        descriptionFilter.value = "";
+        filterTable();
+      });
+
+      function filterTable() {
+        const fabricFilterValue = fabricFilter.value.toLowerCase();
+        const setTypeFilterValue = setTypeFilter.value.toLowerCase();
+        const descriptionFilterValue = descriptionFilter.value.toLowerCase();
+
+        const rows = document.querySelectorAll("tbody tr");
+        rows.forEach((row) => {
+          const fabric = row.children[0].textContent.toLowerCase();
+          const setType = row.children[1].textContent.toLowerCase();
+          const description = row.children[2].textContent.toLowerCase();
+
+          if (
+            (fabricFilterValue === "" || fabric.includes(fabricFilterValue)) &&
+            (setTypeFilterValue === "" || setType.includes(setTypeFilterValue)) &&
+            description.includes(descriptionFilterValue)
+          ) {
+            row.style.display = "";
+          } else {
+            row.style.display = "none";
+          }
+        });
+      }
+
+      // Initial filtering
+      filterTable();
+    });
+  </script>
+{% endblock %}

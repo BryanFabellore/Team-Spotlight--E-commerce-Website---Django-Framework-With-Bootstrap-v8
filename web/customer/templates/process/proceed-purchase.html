@@ -1,0 +1,285 @@
+{% extends 'customer/navbar.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<style type="text/css">
+    /* General Styles */
+    body {
+        background-color: #f8f8f8;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    /* Heading Styles */
+    .page-title {
+        font-size: 28px;
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    /* Two-Column Layout */
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .column {
+        flex: 1;
+        margin: 10px;
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    /* Payment Styles */
+    .payment-methods {
+        display: flex;
+        justify-content: center;
+    }
+
+    .payment-method {
+        margin: 0 10px;
+    }
+
+    /* Shipping Fee Styles */
+    .shipping-fees {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin: 20px 0;
+    }
+
+    .shipping-fee-header {
+        background-color: #f0f0f0;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .shipping-fee-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .shipping-fee-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    /* Order Summary Styles */
+    .order-summary {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin: 20px 0;
+    }
+
+    .order-summary-header {
+        background-color: #f0f0f0;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .order-summary-table {
+        width: 100%;
+    }
+
+    .order-summary-table th, .order-summary-table td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        text-align: center;
+    }
+
+    .order-summary-total {
+        font-weight: bold;
+    }
+
+    /* Customer Info Styles */
+    .customer-info {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin: 20px 0;
+    }
+
+    .customer-info-header {
+        background-color: #f0f0f0;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .customer-info-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .customer-info-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    /* Button Styles */
+    .action-button {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        background-color: #4B99AD;
+        color: #fff;
+        text-decoration: none;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+
+    .btn:hover {
+        background-color: #4691A4;
+    }
+</style>
+
+<div class="container">
+    <h1 class="page-title">Shipping Address Fee Reference</h1>
+
+    <div class="row">
+        <div class="column">
+            <div class="payment-methods">
+            </div>
+            <div class="payment-method">
+                <h3>Price (300)</h3>
+                <ul class="shipping-fee-list">
+                    <li class="shipping-fee-item">NCR</li>
+                    <li class="shipping-fee-item">Region 1</li>
+                    <li class="shipping-fee-item">Region 2</li>
+                    <li class="shipping-fee-item">Region 3</li>
+                    <li class="shipping-fee-item">Region 4A</li>
+                    <li class="shipping-fee-item">Region 5</li>
+                </ul>
+            </div>
+            <div class="column">
+                <div class="payment-method">
+                    <h3>Price (400)</h3>
+                    <ul class="shipping-fee-list">
+                        <li class="shipping-fee-item">Region 6</li>
+                        <li class="shipping-fee-item">Region 7</li>
+                        <li class="shipping-fee-item">Region 8</li>
+                    </ul>
+                </div>
+                <div class="payment-method">
+                    <h3>Price (500)</h3>
+                    <ul class="shipping-fee-list">
+                        <li class="shipping-fee-item">Region 9</li>
+                        <li class="shipping-fee-item">Region 10</li>
+                        <li class="shipping-fee-item">Region 11</li>
+                        <li class="shipping-fee-item">Region 12</li>
+                        <li class="shipping-fee-item">Region 13</li>
+                        <li class="shipping-fee-item">Region CAR</li>
+                        <li class="shipping-fee-item">Region ARMM</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="column">
+            <h1 class="page-title">Confirm Order</h1>
+
+            {% if cart_items %}
+            <div class="order-summary">
+                <div class="order-summary-header">
+                    <h2>Your Orders</h2>
+                </div>
+                <table class="order-summary-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Image</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cart_item in cart_items %}
+                        <tr>
+                            <td>{{ cart_item.product.name }}</td>
+                            <td>₱{{ cart_item.product.price }}</td>
+                            <td>{{ cart_item.quantity }}</td>
+                            <td>
+                                <img src="{{ cart_item.product.product_image.url }}" alt="{{ cart_item.product.name }}" height="150px" width="150px">
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="order-summary-header">
+                    <h2>Billing Breakdown</h2>
+                </div>
+                <table class="order-summary-table">
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Product Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cart_item in cart_items %}
+                        <tr>
+                            <td>{{ cart_item.product.name }}</td>
+                            <td>(₱{{ cart_item.product.price }})</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <p class="order-summary-total">VAT: (12%) {{vat_rate}} | ₱{{ vat }}</p>
+                <p class="order-summary-total">With Vat: ₱{{ with_vat}}</p>
+                <p class="order-summary-total">Shipping Fee ({{ customer_address.region }}): ₱{{ shipping_fee }}</p>
+                <hr>
+                <p class="order-summary-total">Total Price with Shipping: ₱{{ total_price }}</p>
+            </div>
+
+            <div class="customer-info">
+                <div class="customer-info-header">
+                    <h2>Shipping Address</h2>
+                </div>
+                <ul class="customer-info-list">
+                    <li class="customer-info-item">Shipping to: {{ customer_address.street }}, {{ customer_address.city }}, {{ customer_address.zipcode }}</li>
+                </ul>
+            </div>
+
+            <div class="customer-info">
+                <div class="customer-info-header">
+                    <h2>Customer Info</h2>
+                </div>
+                <ul class="customer-info-list">
+                    <li class="customer-info-item">Username: {{ request.user }}</li>
+                    <li class="customer-info-item">Full Name: {{ customer.first_name }} {{ customer.last_name }}</li>
+                    <li class="customer-info-item">Email: {{ customer.email }}</li>
+                    <li class="customer-info-item">Mobile: {{ customer.phone_number }}</li>
+                    <li class="customer-info-item">Shipping Address: {{ customer_address.street }}, {{ customer_address.barangay }}, {{ customer_address.city }}, {{ customer_address.province }} ({{ customer_address.zipcode }})</li>
+                    <li class="customer-info-item">Additional Address Info: {{ customer_address.detailed_address }}</li>
+                </ul>
+            </div>
+
+            <div class="action-button">
+                <a class="btn" href="{% url 'customer:confirmation-cod-payment' %}">Cash On Delivery</a>
+                <a class="btn" href="{% url 'customer:pay-online' %}">Pay Online</a>                
+            </div>
+        </div>
+        </div>
+    {% else %}
+    <h1 class="page-title" style="color: red; text-align: center;">First Add Product In Cart</h1>
+{% endif %}
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% endblock content %}

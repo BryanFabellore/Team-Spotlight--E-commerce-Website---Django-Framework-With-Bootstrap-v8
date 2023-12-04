@@ -1,0 +1,83 @@
+{% extends 'customer/navbar.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .centered-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        text-align: center;
+    }
+
+    .confirmation-title {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+    }
+
+    .confirmation-message {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+    }
+
+    .total-price-label {
+        font-size: 1.5rem;
+        margin-top: 20px;
+    }
+
+    .order-details-title {
+        font-size: 1.5rem;
+        margin-top: 20px;
+    }
+
+    .order-details-table {
+        border: 1px solid #ddd;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .order-details-table th,
+    .order-details-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .back-button {
+        margin-top: 20px;
+    }
+</style>
+
+<div class="centered-content">
+    <h1 class="confirmation-title">Order Confirmation</h1>
+    <p class="confirmation-message">Thank you for choosing Fleeky Curtains!</p>
+
+    <h2 class="order-details-title">Order Details</h2>
+    <table class="order-details-table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order_items %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>₱{{ item.product.price|floatformat:2 }}</td>
+                <td>₱{{ item.item_total|floatformat:2 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p><strong class="total-price-label">Total Price:</strong> ₱{{ order.total_price|floatformat:2 }}</p>
+
+    <a href="{% url 'customer:home' %}" class="btn btn-primary back-button">Back to Home</a>
+</div>
+{% endblock %}

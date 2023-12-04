@@ -1,0 +1,75 @@
+{% include 'navbar/dashboard-side-navbar.html' %}
+
+{% block content %}
+<style>
+  .card-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center the content vertically */
+    align-items: center; /* Center the content horizontally */
+    width: 100vw;
+    height: 100vh;
+    overflow: auto; /* Enable vertical and horizontal scrolling */
+    background-color: #f5f5f5; /* Set a background color */
+    border-radius: 10px; /* Add some border radius for a card-like look */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a subtle box shadow */
+  }
+  
+  .table-wrapper {
+    overflow: auto; /* Enable horizontal scrolling if the content overflows */
+  }
+  
+  .table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .table th, .table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+</style>
+
+<div class="card-container">
+  <h1>Display Orders Data</h1>
+  <div class="table-wrapper">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>Month</th>
+          <th>Day</th>
+          <th>Location</th>
+          <th>Name</th>
+          <th>Fabric</th>
+          <th>Set</th>
+          <th>Color</th>
+          <th>Qty</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+          {% for item in order.orderitem_set.all %}
+            <tr>
+              <td>{{ order.order_date|date:'Y' }}</td>
+              <td>{{ order.order_date|date:'F' }}</td>
+              <td>{{ order.order_date|date:'j' }}</td>
+              <td>{{ order.customer.address.city }}</td>
+              <td>{{ item.product.name }}</td>
+              <td>{{ item.product.category.fabric }}</td>
+              <td>{{ item.product.category.setType }}</td>
+              <td>{{ item.product.color }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.item_total }}</td>
+            </tr>
+          {% endfor %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

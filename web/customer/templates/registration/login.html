@@ -1,0 +1,156 @@
+{% load static %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+
+<html lang="en">
+<style>
+    .prompt {
+        text-align: center;
+        background: #FF5733;
+        color: white;
+        padding: 10px 20px;
+        display: none;
+    }
+
+    .prompt.show {
+        display: block;
+    }
+
+    /* Style the "Show Password" checkbox */
+    .show-password {
+        margin-top: 5px;
+        margin-left: 5px;
+    }
+
+    /* Style the "Show Password" label */
+    .show-password + label {
+        font-weight: 500;
+        color: #333;
+        cursor: pointer;
+        display: inline-block;
+        margin-left: 5px;
+    }
+</style>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Start your development with Meyawo landing page.">
+    <meta name="author" content="Devcrud">
+    <title>Fleeky Curtains</title>
+    <!-- Tab Icon -->
+    <link rel="icon" type="image/x-icon" href="{% static '/imgs/FC_ICON.ico' %}">
+    <!-- Font Icons -->
+    <link rel="stylesheet" href="{% static 'vendors/themify-icons/css/themify-icons.css' %}">
+    <!-- Bootstrap + Steller -->
+    <link rel="stylesheet" href="{% static 'css/meyawo1.css' %}">
+    <!-- CSS Bootstrap -->
+</head>
+<body data-spy="scroll" data-target=".navbar" data-offset="40" id="home">
+
+<!-- Page Navbar -->
+<nav class="custom-navbar affix-top" data-spy="affix" data-offset-top="20">
+    <div class="container">
+        <a class="logo" href="{% url 'guest:index' %}">Fleeky Curtains</a>
+        <ul class="nav">
+            <li class="item">
+                <a class="link" href="{% url 'guest:index' %}">Home</a>
+            </li>
+            <li class="item">
+                <a class "link" href="{% url 'guest:products' %}">All Products</a>
+            </li>
+        </ul>
+        <a href="javascript:void(0)" id="nav-toggle" class="hamburger hamburger--elastic">
+            <div class="hamburger-box">
+                <div class="hamburger-inner"></div>
+            </div>
+        </a>
+    </div>
+</nav><!-- End of Page Navbar -->
+
+<!-- Page Header -->
+<header id="home" class="header_login">
+    <div class="overlay"></div>
+    <div class="header-content container">
+        <h1 class="header-title">
+            <span class="up"></span>
+            <span class="down"></span>
+        </h1>
+        <p class="header-subtitle"></p>
+    </div>
+</header><!-- End of Page Header -->
+
+<!-- Login Page -->
+<form method="POST" id="login-form">
+    {% csrf_token %}
+    <section class="section_login">
+        <div class="login">
+            <div class="row">
+                <div class="col-md-10">
+                    <form class="box">
+                        {% csrf_token %}
+                        <h1>Login</h1>
+                        <!-- Display a general error message -->
+                        <div class="error-message">
+                            {% if form.non_field_errors %}
+                                <p>{{ form.non_field_errors }}</p>
+                            {% endif %}
+                        </div>
+                        {% render_field form.username class="form-control" id="id_username" placeholder="Username" autocomplete="off" %}
+                        <div class="form-group">
+                            {% render_field form.password class="form-control" id="id_password" placeholder="Password" %}
+                            <input type="checkbox" id="show-password" class="show-password">
+                            <label for="show-password">Show Password</label>
+                        </div>
+                        <br>
+                        <button class="btn btn-primary btn-md ms-2" id="login-button">Login</button>
+                        <button class="btn btn-outline-primary" type="button">
+                            <a class="link" href="{% url 'customer:signup' %}">Register</a>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section> <!-- End of Login Page -->
+</form>
+
+
+<!-- Add a hidden prompt message div -->
+<div id="prompt-message" class="prompt hidden"></div>
+
+<!-- JavaScript for refreshing the page -->
+<script>
+    document.getElementById('show-password').addEventListener('change', function () {
+        var passwordInput = document.getElementById('id_password');
+        passwordInput.type = this.checked ? 'text' : 'password';
+    });
+
+    document.getElementById('login-button').addEventListener('click', function (event) {
+        event.preventDefault();
+        var username = document.getElementById('id_username').value;
+        var password = document.getElementById('id_password').value;
+        var errorMessage = document.getElementById('error-message');
+        if (username === '' || password === '') {
+            errorMessage.textContent = 'Invalid username or password';
+            errorMessage.style.color = 'red';
+            var promptMessage = document.getElementById('prompt-message');
+            promptMessage.textContent = 'Invalid username or password';
+            promptMessage.classList.add('show'); // Show the prompt
+            location.reload(); // Reload the page
+        } else {
+            document.getElementById('login-form').submit();
+        }
+    });
+</script>
+
+<!-- Core JS and Bootstrap -->
+<script src="{% static '/vendors/jquery/jquery-3.4.1.js' %}"></script>
+<script src="{% static '/vendors/bootstrap/bootstrap.bundle.js' %}"></script>
+<script src="{% static '/vendors/bootstrap/bootstrap.affix.js' %}"></script>
+<script src="{% static '/js/meyawo.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

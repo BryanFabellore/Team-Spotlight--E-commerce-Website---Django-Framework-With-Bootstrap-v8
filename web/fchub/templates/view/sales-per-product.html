@@ -1,0 +1,141 @@
+{% include 'navbar/dashboard-side-navbar.html' %}
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div class="container">
+    <h1>Sales Per Product</h1>
+    <!-- Pie Chart Card Container -->
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">Pie Chart: Common Fabric Types</h2>
+            <div class="chart-container" style="height: 400px;">
+                <canvas id="fabricPieChart" width="400" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+    <div>
+        <br><br>
+    </div>
+    <!-- Bar Graph Card Container -->
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">Bar Graph: Fabric Sales by Month</h2>
+            <div class="chart-container" style="height: 400px;">
+                <canvas id="fabricBarChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <br><br>
+    </div>
+
+    <!-- Sales Table Container -->
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title">Sales Table</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Fabric</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sale in sales %}
+                        <tr>
+                            <td>{{ sale.date }}</td>
+                            <td>{{ sale.fabric }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Include Chart.js from a CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Fabric data for the pie chart
+    var fabricCounts = {{ fabric_counts|safe }};
+    var fabricLabels = {{ fabric_labels|safe }};
+
+    // Bar graph data
+    var barData = {{ bar_data|safe }};
+
+    // Create a pie chart
+    var pieCtx = document.getElementById('fabricPieChart').getContext('2d');
+    var pieChart = new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+            labels: fabricLabels,
+            datasets: [{
+                data: fabricCounts,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(153, 102, 255, 0.7)',
+                    'rgba(255, 159, 64, 0.7)',
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: {
+                display: true,
+                position: 'bottom'
+            },
+            tooltips: {
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        var dataset = data.datasets[0];
+                        var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
+                            return previousValue + currentValue;
+                        });
+                        var currentValue = dataset.data[tooltipItem.index];
+                        var percentage = Math.floor(((currentValue / total) * 100) + 0.5);
+                        return fabricLabels[tooltipItem.index] + ': ' + percentage + '%';
+                    }
+                }
+            }
+        }
+    });
+
+    // Create a bar graph
+    var barCtx = document.getElementById('fabricBarChart').getContext('2d');
+    var barChart = new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: barData.months,
+            datasets: barData.fabrics.map(function(fabric, index) {
+                return {
+                    label: fabric,
+                    data: barData.sales_data[fabric],
+                    backgroundColor: ['rgba(255, 99, 132, 0.7)',
+                                    'rgba(54, 162, 235, 0.7)',
+                                    'rgba(255, 206, 86, 0.7)',
+                                    'rgba(75, 192, 192, 0.7)',
+                                    'rgba(153, 102, 255, 0.7)',
+                                    'rgba(255, 159, 64, 0.7)'][index % 6],
+                };
+            })
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    stacked: true
+                },
+                y: {
+                    stacked: true
+                }
+            }
+        }
+    });
+
+</script>
+{% endblock %}
